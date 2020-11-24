@@ -4,7 +4,7 @@ class Archivebox < Formula
   desc "The self-hosted internet archiving solution"
   homepage "https://archivebox.io"
   url "https://files.pythonhosted.org/packages/07/97/73a0aab78022f58f22d9ccbd86b8c3dd29313295c478861703fd74b58e14/archivebox-0.4.21.tar.gz"
-  version "0.4.24"
+  version "0.4.24-1"
   sha256 "ae6bbd2a63dedec4b55eac3418440c2e50a11e16e18b28e4c7cd46332d679e47"
   license "MIT"
 
@@ -13,6 +13,7 @@ class Archivebox < Formula
   depends_on "curl"
   depends_on "git"
   depends_on "node"
+  depends_on "youtube_dl"
 
   resource "appnope" do
     url "https://files.pythonhosted.org/packages/26/34/0f3a5efac31f27fabce64645f8c609de9d925fe2915304d1a40f544cff0e/appnope-0.1.0.tar.gz"
@@ -199,17 +200,12 @@ class Archivebox < Formula
     sha256 "c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"
   end
 
-  resource "youtube_dl" do
-    url "https://files.pythonhosted.org/packages/79/88/05bc5ff2b03a218650523ee09f00465e95c278fe0105beda24cb756804c7/youtube_dl-2020.11.24.tar.gz"
-    sha256 "f701befffe00ae4b0d56f88ed45e1295c151c340d0011efdb1005012abc81996"
-  end
-
   def install
     venv = virtualenv_create(libexec, "python3")
     # Install all of the resources declared on the formula into the virtualenv.
     resources.each do |r|
       # ansible-base provides all ansible binaries
-      if r.name == "archivebox" || r.name == "youtube_dl"
+      if r.name == "archivebox"
         venv.pip_install_and_link r
       else
         venv.pip_install r
