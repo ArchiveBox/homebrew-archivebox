@@ -205,7 +205,17 @@ class Archivebox < Formula
   end
 
   def install
-    virtualenv_install_with_resources
+    venv = virtualenv_create(libexec, "python3")
+    # Install all of the resources declared on the formula into the virtualenv.
+    resources.each do |r|
+      # ansible-base provides all ansible binaries
+      if r.name == "archivebox" || r.name == "youtube_dl"
+        venv.pip_install_and_link r
+      else
+        venv.pip_install r
+      end
+    end
+    venv.pip_install_and_link buildpath
   end
 
   test do
