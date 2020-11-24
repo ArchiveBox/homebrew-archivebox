@@ -3,9 +3,9 @@ class Archivebox < Formula
 
   desc "The self-hosted internet archiving solution"
   homepage "https://archivebox.io"
-  url "https://github.com/ArchiveBox/ArchiveBox/archive/master.zip"
+  url "https://files.pythonhosted.org/packages/07/97/73a0aab78022f58f22d9ccbd86b8c3dd29313295c478861703fd74b58e14/archivebox-0.4.21.tar.gz"
   version "0.4.24"
-  sha256 "c72d8357677f17341961094ed96ac2af44a6c4f04dae8bce416de0527b2293fe"
+  sha256 "ae6bbd2a63dedec4b55eac3418440c2e50a11e16e18b28e4c7cd46332d679e47"
   license "MIT"
 
   depends_on "python@3.9"
