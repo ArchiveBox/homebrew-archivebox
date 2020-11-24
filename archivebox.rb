@@ -5,7 +5,7 @@ class Archivebox < Formula
   homepage "https://archivebox.io"
   url "https://github.com/ArchiveBox/ArchiveBox/archive/master.zip"
   version "0.4.24"
-  sha256 "2162768738254e681d7f8f7622e407382e3655a7f5f8beeb1f4f6a786ac8844c"
+  sha256 "c72d8357677f17341961094ed96ac2af44a6c4f04dae8bce416de0527b2293fe"
   license "MIT"
 
   depends_on "python@3.9"
