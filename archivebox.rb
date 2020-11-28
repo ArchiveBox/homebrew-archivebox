@@ -200,6 +200,8 @@ class Archivebox < Formula
     sha256 "c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"
   end
 
+  # TODO: figure out how to install npm modules here too: mercury, singlefile, readability 
+
   def install
     venv = virtualenv_create(libexec, "python3")
     # Install all of the resources declared on the formula into the virtualenv.
