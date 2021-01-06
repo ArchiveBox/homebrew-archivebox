@@ -3,9 +3,9 @@ class Archivebox < Formula
 
   desc "The self-hosted internet archiving solution"
   homepage "https://archivebox.io"
-  url "https://files.pythonhosted.org/packages/07/97/73a0aab78022f58f22d9ccbd86b8c3dd29313295c478861703fd74b58e14/archivebox-0.4.21.tar.gz"
-  version "0.4.24-1"
-  sha256 "ae6bbd2a63dedec4b55eac3418440c2e50a11e16e18b28e4c7cd46332d679e47"
+  url "https://files.pythonhosted.org/packages/c5/0b/bc14c5d598b92981873f65185e3045d8759f5f64008abf870c4faf6d8d46/archivebox-0.5.3.tar.gz"
+  version "0.5.3-1"
+  sha256 "68af7e1db93f0bc75cf071227fd9a0856036b199165d73834b4c25ed03ba72e3"
   license "MIT"
 
   depends_on "python@3.9"
@@ -22,8 +22,8 @@ class Archivebox < Formula
   end
 
   resource "archivebox" do
-    url "https://files.pythonhosted.org/packages/07/97/73a0aab78022f58f22d9ccbd86b8c3dd29313295c478861703fd74b58e14/archivebox-0.4.21.tar.gz"
-    sha256 "ae6bbd2a63dedec4b55eac3418440c2e50a11e16e18b28e4c7cd46332d679e47"
+    url "https://files.pythonhosted.org/packages/c5/0b/bc14c5d598b92981873f65185e3045d8759f5f64008abf870c4faf6d8d46/archivebox-0.5.3.tar.gz"
+    sha256 "68af7e1db93f0bc75cf071227fd9a0856036b199165d73834b4c25ed03ba72e3"
   end
 
   resource "asgiref" do
