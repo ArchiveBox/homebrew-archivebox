@@ -201,6 +201,11 @@ class Archivebox < Formula
     sha256 "c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"
   end
 
+  resource "django-jsonfield" do
+    url "https://files.pythonhosted.org/packages/ec/34/73e980f5f5b1f240e0cbc81298728cae0a8e5dcd0967550b0e3fea4a7647/django-jsonfield-1.4.1.tar.gz"
+    sha256 "f789a0ea1f80b48aff7d6c36dd356ce125dbf1b7cd97a82d315607ac758f50ff"
+  end
+
   # TODO: figure out how to install npm modules here too: mercury, singlefile, readability 
 
   def install
