@@ -25,10 +25,19 @@ Tested on macOS, on Linux you should use the [`apt`/`deb` package](https://launc
 Make sure you're in the main ArchiveBox repo folder first.
 ```bash
 cd ArchiveBox/
+git submodule update --init --recursive
 git pull --recurse-submodules
 
 # Install the package locally during testing
 brew install --debug --verbose --interactive ./archivebox.rb
 
-# Commit any changes to archivebox.rb and push to make them live
+# Commit any changes to archivebox.rb, build the bottle and push to github
+brew install --build-bottle ./archivebox.rb
+git add .
+git commit -m "new release ✨"
+git push origin main
+
+# or use the script
+./bin/build_brew.sh
+./bin/release_brew.sh
 ```
