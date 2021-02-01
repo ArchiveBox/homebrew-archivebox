@@ -3,10 +3,11 @@ class Archivebox < Formula
 
   desc "The self-hosted internet archiving solution"
   homepage "https://archivebox.io"
-  url "https://files.pythonhosted.org/packages/c5/0b/bc14c5d598b92981873f65185e3045d8759f5f64008abf870c4faf6d8d46/archivebox-0.5.3.tar.gz"
-  version "0.5.3-1"
-  sha256 "68af7e1db93f0bc75cf071227fd9a0856036b199165d73834b4c25ed03ba72e3"
   license "MIT"
+  version "0.5.4-1"
+  url "https://test-files.pythonhosted.org/packages/2b/67/53c96296f8f985b96749fdfcc6f22178bcd25bfc28416e928cbebcdc82b9/archivebox-0.5.4.tar.gz"
+  sha256 "fd6e86c181d831e39bc6614dc76106837e7d710aa0841fcb64dbe4bdf52bf056"
+  # curl 'https://test-files.pythonhosted.org/packages/2b/67/53c96296f8f985b96749fdfcc6f22178bcd25bfc28416e928cbebcdc82b9/archivebox-0.5.4.tar.gz' | sha256sum
 
   depends_on "python@3.9"
   depends_on "wget"
@@ -22,8 +23,8 @@ class Archivebox < Formula
   end
 
   resource "archivebox" do
-    url "https://files.pythonhosted.org/packages/c5/0b/bc14c5d598b92981873f65185e3045d8759f5f64008abf870c4faf6d8d46/archivebox-0.5.3.tar.gz"
-    sha256 "68af7e1db93f0bc75cf071227fd9a0856036b199165d73834b4c25ed03ba72e3"
+    url "https://test-files.pythonhosted.org/packages/2b/67/53c96296f8f985b96749fdfcc6f22178bcd25bfc28416e928cbebcdc82b9/archivebox-0.5.4.tar.gz"
+    sha256 "fd6e86c181d831e39bc6614dc76106837e7d710aa0841fcb64dbe4bdf52bf056"
   end
 
   resource "asgiref" do
