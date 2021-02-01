@@ -1,7 +1,7 @@
 class Archivebox < Formula
   include Language::Python::Virtualenv
 
-  desc "The self-hosted internet archiving solution"
+  desc "Self-hosted internet archiving solution"
   homepage "https://archivebox.io"
   license "MIT"
   version "0.5.4-1"
@@ -10,12 +10,12 @@ class Archivebox < Formula
   # curl 'https://test-files.pythonhosted.org/packages/2b/67/53c96296f8f985b96749fdfcc6f22178bcd25bfc28416e928cbebcdc82b9/archivebox-0.5.4.tar.gz' | sha256sum
 
   depends_on "python@3.9"
-  depends_on "wget"
   depends_on "curl"
   depends_on "git"
   depends_on "node"
-  depends_on "youtube-dl"
   depends_on "ripgrep"
+  depends_on "wget"
+  depends_on "youtube-dl"
 
   resource "appnope" do
     url "https://files.pythonhosted.org/packages/26/34/0f3a5efac31f27fabce64645f8c609de9d925fe2915304d1a40f544cff0e/appnope-0.1.0.tar.gz"
@@ -207,7 +207,7 @@ class Archivebox < Formula
     sha256 "f789a0ea1f80b48aff7d6c36dd356ce125dbf1b7cd97a82d315607ac758f50ff"
   end
 
-  # TODO: figure out how to install npm modules here too: mercury, singlefile, readability 
+  # TODO: figure out how to install npm modules here too: mercury, singlefile, readability
 
   def install
     venv = virtualenv_create(libexec, "python3")
