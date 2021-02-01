@@ -30,6 +30,9 @@ git pull --recurse-submodules
 
 # Install the package locally during testing
 brew install --debug --verbose --interactive ./archivebox.rb
+brew install --build-bottle ./archivebox.rb
+brew test-bot --root-url=https://github.com/ArchiveBox/ArchiveBox.git --tap=ArchiveBox/homebrew-archivebox archivebox/archivebox/archivebox
+brew bottle archivebox
 
 # Commit any changes to archivebox.rb, build the bottle and push to github
 brew install --build-bottle ./archivebox.rb
