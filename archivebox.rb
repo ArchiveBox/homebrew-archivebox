@@ -4,10 +4,10 @@ class Archivebox < Formula
   desc "Self-hosted internet archiving solution"
   homepage "https://archivebox.io"
   license "MIT"
-  version "0.5.4-1"
-  url "https://test-files.pythonhosted.org/packages/2b/67/53c96296f8f985b96749fdfcc6f22178bcd25bfc28416e928cbebcdc82b9/archivebox-0.5.4.tar.gz"
-  sha256 "fd6e86c181d831e39bc6614dc76106837e7d710aa0841fcb64dbe4bdf52bf056"
-  # curl 'https://test-files.pythonhosted.org/packages/2b/67/53c96296f8f985b96749fdfcc6f22178bcd25bfc28416e928cbebcdc82b9/archivebox-0.5.4.tar.gz' | sha256sum
+  version "0.6.2-1"
+  url "https://files.pythonhosted.org/packages/b2/01/37fdcb4bd60ec7187aa8196393d667478b0d1c97ba1b6b78cfd7e4501d69/archivebox-0.6.2.tar.gz"
+  sha256 "cc7b72ee54eb6bac9a6fd774ab712ab0f1b717e96b9d92fa3e34006cbd40d8d6"
+  # curl 'https://files.pythonhosted.org/packages/b2/01/37fdcb4bd60ec7187aa8196393d667478b0d1c97ba1b6b78cfd7e4501d69/archivebox-0.6.2.tar.gz' | sha256sum
 
   depends_on "python@3.9"
   depends_on "curl"
@@ -23,18 +23,13 @@ class Archivebox < Formula
   end
 
   resource "archivebox" do
-    url "https://test-files.pythonhosted.org/packages/2b/67/53c96296f8f985b96749fdfcc6f22178bcd25bfc28416e928cbebcdc82b9/archivebox-0.5.4.tar.gz"
-    sha256 "fd6e86c181d831e39bc6614dc76106837e7d710aa0841fcb64dbe4bdf52bf056"
+    url "https://files.pythonhosted.org/packages/b2/01/37fdcb4bd60ec7187aa8196393d667478b0d1c97ba1b6b78cfd7e4501d69/archivebox-0.6.2.tar.gz"
+    sha256 "cc7b72ee54eb6bac9a6fd774ab712ab0f1b717e96b9d92fa3e34006cbd40d8d6"
   end
 
   resource "asgiref" do
     url "https://files.pythonhosted.org/packages/e9/d1/096b5b0b411a1a53c294a508fdc51542de77bc193df5c8230ff9445e4ff3/asgiref-3.3.1.tar.gz"
     sha256 "7162a3cb30ab0609f1a4c95938fd73e8604f63bdba516a7f7d64b83ff09478f0"
-  end
-
-  resource "atomicwrites" do
-    url "https://files.pythonhosted.org/packages/55/8d/74a75635f2c3c914ab5b3850112fd4b0c8039975ecb320e4449aa363ba54/atomicwrites-1.4.0.tar.gz"
-    sha256 "ae70396ad1a434f9c7046fd2dd196fc04b12f9e91ffb859164193be8b6168a7a"
   end
 
   resource "backcall" do
@@ -73,8 +68,8 @@ class Archivebox < Formula
   end
 
   resource "Django" do
-    url "https://files.pythonhosted.org/packages/c6/e0/19b529ca9c55fa0ee095edffa7135a8eff354490159d2d64d006928beb84/Django-3.0.8.tar.gz"
-    sha256 "31a5fbbea5fc71c99e288ec0b2f00302a0a92c44b13ede80b73a6a4d6d205582"
+    url "https://files.pythonhosted.org/packages/a1/e6/e68c5acd0a74c6daccfd109c3dc5c8003afaaa669db7eacd15863b0035b5/Django-3.1.8.tar.gz"
+    sha256 "f8393103e15ec2d2d313ccbb95a3f1da092f9f58d74ac1c61ca2ac0436ae1eac"
   end
 
   resource "django-extensions" do
