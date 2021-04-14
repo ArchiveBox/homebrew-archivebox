@@ -9,10 +9,6 @@ class Archivebox < Formula
   sha256 "cc7b72ee54eb6bac9a6fd774ab712ab0f1b717e96b9d92fa3e34006cbd40d8d6"
   # curl 'https://files.pythonhosted.org/packages/b2/01/37fdcb4bd60ec7187aa8196393d667478b0d1c97ba1b6b78cfd7e4501d69/archivebox-0.6.2.tar.gz' | sha256sum
 
-  bottle do
-    sha256 cellar: :any_skip_relocation, big_sur: "27779a977f01d6aad143f0c7b6cbab1c036f01c692b774212b0fb85ba4f317d1"
-  end
-
   depends_on "python@3.9"
   depends_on "curl"
   depends_on "git"
