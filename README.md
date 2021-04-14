@@ -35,7 +35,11 @@ brew test-bot --root-url=https://github.com/ArchiveBox/ArchiveBox.git --tap=Arch
 brew bottle archivebox
 
 # Commit any changes to archivebox.rb, build the bottle and push to github
-brew install --build-bottle ./archivebox.rb
+brew uninstall archivebox
+brew untap archivebox/archivebox
+# push the latest archivebox.rb to gitub, then install and bottle it from github
+brew install --build-bottle archivebox/archivebox/archivebox
+brew bottle archivebox/archivebox/archivebox
 git add .
 git commit -m "new release ✨"
 git push origin main
