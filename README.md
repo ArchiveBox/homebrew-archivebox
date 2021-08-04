@@ -17,7 +17,7 @@ archivebox add 'https://example.com'
 
 ---
 
-Tested on macOS, on Linux you should use the [`apt`/`deb` package](https://launchpad.net/~archivebox/+archive/ubuntu/archivebox/+packages) if possible.
+Tested on macOS >= 11. (Linux users should install via [`apt`/`deb`](https://launchpad.net/~archivebox/+archive/ubuntu/archivebox/+packages) or `pip` instead)
 
 
 ## Development
