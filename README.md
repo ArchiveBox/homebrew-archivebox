@@ -6,7 +6,8 @@ The official brew.sh formula for [ArchiveBox](https://github.com/ArchiveBox/Arch
 
 ```bash
 # 🧙‍♀️ ✨ the magic incantation
-brew install archivebox/archivebox/archivebox
+brew tap archivebox/archivebox
+brew install archivebox
 
 archivebox version
 archivebox init
