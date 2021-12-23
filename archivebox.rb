@@ -202,6 +202,11 @@ class Archivebox < Formula
     sha256 "f789a0ea1f80b48aff7d6c36dd356ce125dbf1b7cd97a82d315607ac758f50ff"
   end
 
+  resource "youtube_dl" do
+    url "https://files.pythonhosted.org/packages/01/4f/ab0d0806f4d818168d0ec833df14078c9d1ddddb5c42fa7bfb6f15ecbfa7/youtube_dl-2021.12.17.tar.gz"
+    sha256 "bc59e86c5d15d887ac590454511f08ce2c47698d5a82c27bfe27b5d814bbaed2"
+  end
+
   # TODO: figure out how to install npm modules here too: mercury, singlefile, readability
 
   def install
