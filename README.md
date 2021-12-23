@@ -9,6 +9,7 @@ The official brew.sh formula for [ArchiveBox](https://github.com/ArchiveBox/Arch
 brew tap archivebox/archivebox
 brew install archivebox
 
+mkdir ~/archivebox && cd ~/archivebox  # data folder can be anywhere
 archivebox version
 archivebox init
 archivebox add 'https://example.com'
