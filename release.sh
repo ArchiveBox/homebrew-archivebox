@@ -1,0 +1,1 @@
+../bin/release_brew.sh
