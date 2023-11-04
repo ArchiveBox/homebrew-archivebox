@@ -1,13 +1,12 @@
-class Archivebox < Formula
+class ArchiveBox < Formula
   include Language::Python::Virtualenv
 
   url "https://files.pythonhosted.org/packages/9a/37/e0e3d1cb9db0f4db35d497879b2f834d470c03a8d693626a81c44ed500c7/archivebox-0.7.1.tar.gz"
   sha256 "201298a7a00a4130ba2e2092d8a2c6172e75fd4d7c47e79885b45d86babcfe9c"
-  
   version "0.7.1-1"
   license "MIT"
-  homepage "https://archivebox.io"
   desc "Self-hosted internet archiving solution"
+  homepage "https://archivebox.io"
 
   depends_on "curl"
   depends_on "git"
@@ -20,11 +19,6 @@ class Archivebox < Formula
   resource "appnope" do
     url "https://files.pythonhosted.org/packages/6a/cd/355842c0db33192ac0fc822e2dcae835669ef317fe56c795fb55fcddb26f/appnope-0.1.3.tar.gz"
     sha256 "02bd91c4de869fbb1e1c50aafc4098827a7a54ab2f39d9dcba6c9547ed920e24"
-  end
-
-  resource "archivebox" do
-    url "https://files.pythonhosted.org/packages/9a/37/e0e3d1cb9db0f4db35d497879b2f834d470c03a8d693626a81c44ed500c7/archivebox-0.7.1.tar.gz"
-    sha256 "201298a7a00a4130ba2e2092d8a2c6172e75fd4d7c47e79885b45d86babcfe9c"
   end
 
   resource "asgiref" do
@@ -238,15 +232,7 @@ class Archivebox < Formula
   end
 
   def install
-    venv = virtualenv_create(libexec, "python3")
-    resources.each do |r|
-      if r.name == "archivebox"
-        venv.pip_install_and_link r
-      else
-        venv.pip_install r
-      end
-    end
-    venv.pip_install_and_link buildpath
+    virtualenv_install_with_resources
   end
 
   def post_install
@@ -257,7 +243,7 @@ class Archivebox < Formula
     run [opt_bin/"archivebox", "server", "--quick-init", "0.0.0.0:8000"]
     keep_alive crashed: true
   end
-  
+
   test do
     system "#{bin}/archivebox", "version"
     system "#{bin}/archivebox", "init"
