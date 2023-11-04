@@ -1,26 +1,21 @@
 class Archivebox < Formula
   include Language::Python::Virtualenv
 
-  desc "Self-hosted internet archiving solution"
-  homepage "https://archivebox.io"
-  license "MIT"
   url "https://files.pythonhosted.org/packages/9a/37/e0e3d1cb9db0f4db35d497879b2f834d470c03a8d693626a81c44ed500c7/archivebox-0.7.1.tar.gz"
   sha256 "201298a7a00a4130ba2e2092d8a2c6172e75fd4d7c47e79885b45d86babcfe9c"
-  # curl 'https://files.pythonhosted.org/packages/.../archivebox-....tar.gz' | sha256sum
+  
   version "0.7.1-1"
+  license "MIT"
+  homepage "https://archivebox.io"
+  desc "Self-hosted internet archiving solution"
 
-  depends_on "python@3.11"
   depends_on "curl"
-  depends_on "wget"
   depends_on "git"
   depends_on "node"
+  depends_on "python@3.11"
   depends_on "ripgrep"
+  depends_on "wget"
   depends_on "yt-dlp"
-  
-  ### Generate this resource list
-  # pip3 install --user homebrew-pypi-poet
-  # pip3 install ./dist/archivebox-*.whl
-  # poet archivebox
 
   resource "appnope" do
     url "https://files.pythonhosted.org/packages/6a/cd/355842c0db33192ac0fc822e2dcae835669ef317fe56c795fb55fcddb26f/appnope-0.1.3.tar.gz"
@@ -242,14 +237,9 @@ class Archivebox < Formula
     sha256 "e026ea1c435ff36eef1215bc4c5bb8c479938b90054997ba99f63a4541fe63b4"
   end
 
-
-  # TODO: figure out how to install npm modules here too: mercury, singlefile, readability
-
   def install
     venv = virtualenv_create(libexec, "python3")
-    # Install all of the resources declared on the formula into the virtualenv.
     resources.each do |r|
-
       if r.name == "archivebox"
         venv.pip_install_and_link r
       else
@@ -263,10 +253,10 @@ class Archivebox < Formula
     system "#{bin}/archivebox", "setup"
   end
 
-  # service do
-  #   run [opt_bin/"archivebox", "server", "--quick-init", "0.0.0.0:8000"]
-  #   keep_alive crashed: true
-  # end
+  service do
+    run [opt_bin/"archivebox", "server", "--quick-init", "0.0.0.0:8000"]
+    keep_alive crashed: true
+  end
   
   test do
     system "#{bin}/archivebox", "version"
