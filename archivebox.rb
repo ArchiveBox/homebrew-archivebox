@@ -4,10 +4,10 @@ class Archivebox < Formula
   desc "Self-hosted internet archiving solution"
   homepage "https://archivebox.io"
   license "MIT"
-  version "0.7.1-1"
   url "https://files.pythonhosted.org/packages/9a/37/e0e3d1cb9db0f4db35d497879b2f834d470c03a8d693626a81c44ed500c7/archivebox-0.7.1.tar.gz"
   sha256 "201298a7a00a4130ba2e2092d8a2c6172e75fd4d7c47e79885b45d86babcfe9c"
-  # curl 'https://files.pythonhosted.org/packages/b2/01/.../archivebox-....tar.gz' | sha256sum
+  # curl 'https://files.pythonhosted.org/packages/.../archivebox-....tar.gz' | sha256sum
+  version "0.7.1-1"
 
   depends_on "python@3.11"
   depends_on "curl"
