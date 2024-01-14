@@ -9,6 +9,9 @@ The official brew.sh formula for [ArchiveBox](https://github.com/ArchiveBox/Arch
 brew tap archivebox/archivebox
 brew install archivebox
 
+# sometimes brew is few minor versions behind latest version, upgrade to latest with pip
+pip install --upgrade --ignore-installed archivebox
+
 mkdir ~/archivebox && cd ~/archivebox  # data folder can be anywhere
 archivebox version
 archivebox init
