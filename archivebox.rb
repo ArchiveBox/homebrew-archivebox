@@ -234,9 +234,23 @@ class Archivebox < Formula
     sha256 "a11862e57721b0a0f0883dfeb5a4d79ba213a2d4c45e1880e9fd70f8e6570c38"
   end
 
+  resource "gallery-dl" do
+    url "https://files.pythonhosted.org/packages/5a/92/6ca8c647413857677dba60998ee064a02af5a8a9e36a0285d9da3cc915c7/gallery_dl-1.26.8.tar.gz"
+    sha256 "b5f3662a058aaf64c640d82f0bfaa8dbe0ef8a3e0b50bd19cbbee67d371c8b69"
+  end
+
+  resource "playwright" do
+    url "https://files.pythonhosted.org/packages/e4/40/f69d23fbd8d4c59b9b05578ad2b33745ee34ad33b64133b4a2659cfae071/playwright-1.41.2-py3-none-macosx_11_0_arm64.whl"
+    sha256 "431e3a05f8c99147995e2b3e8475d07818745294fd99f1510b61756e73bdcf68"
+  end
+
   def install
     virtualenv_install_with_resources
+    # install + link python extras
+    system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "archivebox[sonic,ldap]"
+    bin.install_symlink Dir["#{libexec}/lib/node_modules/archivebox/node_modules/.bin/{yt-dlp,gallery-dl,playwright}"]
     
+    # install + link npm extras
     cd "#{prefix}/libexec/lib/python3.11/site-packages/archivebox/" do
       system "npm", "install", *Language::Node.std_npm_install_args(libexec)
     end
@@ -246,9 +260,6 @@ class Archivebox < Formula
   def post_install
     # install most recent versions from PyPI (versions included in package resources are rapidly out of date)
     system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "playwright"
-    system "ln", "-sf", "#{libexec}/bin/archivebox", "#{HOMEBREW_PREFIX}/bin/"
-    system "ln", "-sf", "#{libexec}/bin/yt-dlp", "#{HOMEBREW_PREFIX}/bin/"
-    system "ln", "-sf", "#{libexec}/bin/playwright", "#{HOMEBREW_PREFIX}/bin/"
 
     # create initial data dir and run init + setup inside
     mkdir_p "#{HOMEBREW_PREFIX}/var/archivebox/data"
