@@ -249,7 +249,7 @@ class Archivebox < Formula
       bin.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/single-file"
       bin.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/readability-extractor"
       bin.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/mercury-parser"
-      system "#{bin}/../libexec/bin/playwright", "install", "--with-deps", "--force", "chromium"
+      # system "#{bin}/../libexec/bin/playwright", "install", "chromium"
     end
   end
 
