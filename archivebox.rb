@@ -285,7 +285,7 @@ class Archivebox < Formula
       system "#{HOMEBREW_PREFIX}/bin/archivebox", "init"
       quiet_system "#{HOMEBREW_PREFIX}/bin/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
       system "#{HOMEBREW_PREFIX}/bin/archivebox", "setup"
-      # system "#{bin}/../libexec/bin/playwright", "install", "chromium"
+      system "#{HOMEBREW_PREFIX}/bin/playwright", "install", "chromium"
     end
   end
 
