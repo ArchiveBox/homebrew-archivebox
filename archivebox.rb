@@ -3,9 +3,9 @@ class Archivebox < Formula
 
   desc "Self-hosted internet archiving solution"
   homepage "https://archivebox.io"
-  url "https://files.pythonhosted.org/packages/9a/37/e0e3d1cb9db0f4db35d497879b2f834d470c03a8d693626a81c44ed500c7/archivebox-0.7.1.tar.gz"
-  version "0.7.1-1"
-  sha256 "201298a7a00a4130ba2e2092d8a2c6172e75fd4d7c47e79885b45d86babcfe9c"
+  url "https://files.pythonhosted.org/packages/9e/43/9103809ae978b92e11ef3b3ad3af7521ca82934d3f3ddb785556b62b0d57/archivebox-0.7.2.tar.gz"
+  version "0.7.2-1"
+  sha256 "85d054117dad3963766f5d70e9a1b7c7b30feca4138f8470736c3c5ef00119fe"
   license "MIT"
 
   depends_on "curl"
@@ -15,6 +15,7 @@ class Archivebox < Formula
   depends_on "ripgrep"
   depends_on "wget"
   depends_on "yt-dlp"
+  depends_on "sonic"
 
   resource "appnope" do
     url "https://files.pythonhosted.org/packages/6a/cd/355842c0db33192ac0fc822e2dcae835669ef317fe56c795fb55fcddb26f/appnope-0.1.3.tar.gz"
@@ -227,8 +228,8 @@ class Archivebox < Formula
   end
 
   resource "yt-dlp" do
-    url "https://files.pythonhosted.org/packages/db/7f/8bdf5c78fc01a71f1babcc813b972996144b46ee88394356f4a188686db5/yt-dlp-2023.10.13.tar.gz"
-    sha256 "e026ea1c435ff36eef1215bc4c5bb8c479938b90054997ba99f63a4541fe63b4"
+    url "https://files.pythonhosted.org/packages/a9/a7/d8536993aed7569c5221f532e3ba01b09d5bdc893df3ef4e5b05d01582c4/yt-dlp-2023.12.30.tar.gz"
+    sha256 "a11862e57721b0a0f0883dfeb5a4d79ba213a2d4c45e1880e9fd70f8e6570c38"
   end
 
   def install
@@ -236,6 +237,8 @@ class Archivebox < Formula
   end
 
   def post_install
+    system "#{bin}/python3", "-m", "pip", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "playwright"
+    system "#{bin}/python3", "-m", "playwright", "install", "--with-deps", "chromium"
     system "#{bin}/archivebox", "setup"
   end
 
