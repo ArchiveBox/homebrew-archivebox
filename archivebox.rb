@@ -234,25 +234,27 @@ class Archivebox < Formula
 
   def install
     virtualenv_install_with_resources
+
+    system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "playwright"
+    
+    cd "#{prefix}/libexec/lib/python3.11/site-packages/archivebox/" do
+      system "npm", "install", *Language::Node.std_npm_install_args(libexec)
+    end
+    bin.install_symlink Dir["#{libexec}/bin/*"]
   end
 
   def post_install
-    system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "playwright"
-    system "ln", "-sf", "#{prefix}/libexec/bin/archivebox", "#{HOMEBREW_PREFIX}/bin/"
-    system "ln", "-sf", "#{prefix}/libexec/bin/yt-dlp", "#{HOMEBREW_PREFIX}/bin/"
-    system "ln", "-sf", "#{prefix}/libexec/bin/playwright", "#{HOMEBREW_PREFIX}/bin/"
-
     mkdir_p "#{HOMEBREW_PREFIX}/var/archivebox/data"
     cd "#{HOMEBREW_PREFIX}/var/archivebox/data" do
       system "#{HOMEBREW_PREFIX}/bin/archivebox", "init"
       quiet_system "#{HOMEBREW_PREFIX}/bin/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
-      system "ln", "-sf", "#{prefix}/libexec/lib/python3.11/site-packages/archivebox/package.json", "#{HOMEBREW_PREFIX}/var/archivebox/data/"
+      #system "ln", "-sf", "#{prefix}/libexec/lib/python3.11/site-packages/archivebox/package.json", "#{HOMEBREW_PREFIX}/var/archivebox/data/"
       system "#{HOMEBREW_PREFIX}/bin/archivebox", "setup"
-      system "ln", "-sf", "#{prefix}/libexec/lib/python3.11/site-packages/archivebox/package.json", "#{HOMEBREW_PREFIX}/var/archivebox/data/"
-      system "npm", "install", "--force", "--no-save", "--no-audit"
-      system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/single-file", "#{HOMEBREW_PREFIX}/bin/"
-      system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/readability-extractor", "#{HOMEBREW_PREFIX}/bin/"
-      system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/mercury-parser", "#{HOMEBREW_PREFIX}/bin/"
+      #system "ln", "-sf", "#{prefix}/libexec/lib/python3.11/site-packages/archivebox/package.json", "#{HOMEBREW_PREFIX}/var/archivebox/data/"
+      #system "npm", "install", "--force", "--no-save", "--no-audit", "--no-cache"
+      #system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/single-file", "#{HOMEBREW_PREFIX}/bin/"
+      #system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/readability-extractor", "#{HOMEBREW_PREFIX}/bin/"
+      #system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/mercury-parser", "#{HOMEBREW_PREFIX}/bin/"
 
       # system "#{bin}/../libexec/bin/playwright", "install", "chromium"
     end
