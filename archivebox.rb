@@ -241,10 +241,10 @@ class Archivebox < Formula
     bin.install_symlink "#{prefix}/libexec/bin/yt-dlp"
     bin.install_symlink "#{prefix}/libexec/bin/playwright"
 
-    system "mkdir", "-p", "#{HOMEBREW_PREFIX}/var/archivebox/data"
+    mkdir_p "#{HOMEBREW_PREFIX}/var/archivebox/data"
     cd "#{HOMEBREW_PREFIX}/var/archivebox/data" do
       system "#{bin}/archivebox", "init"
-      system "#{bin}/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
+      quiet_system "#{bin}/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
       system "#{bin}/archivebox", "setup"
       bin.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/*"
       system "#{bin}/../libexec/bin/playwright", "install", "chromium"
