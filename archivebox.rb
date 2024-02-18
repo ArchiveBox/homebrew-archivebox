@@ -229,6 +229,23 @@ class Archivebox < Formula
     sha256 "81df9cbcbb6c260de1e007e58c011bfebe2dafc8435107b0537f393dd38c8b1b"
   end
 
+  # extras
+  resource "sonic-client" do
+    url "https://files.pythonhosted.org/packages/29/47/5c356456e5dc3ba3f52d88a6b4d0661bdbe44a6a2340b3ca04005504c8ab/sonic-client-1.0.0.tar.gz"
+    sha256 "fe324c7354670488ed84847f6a6727d3cb5fb3675cb9b61396dcf5720e5aca66"
+  end
+
+  resource "python-ldap" do
+    url "https://files.pythonhosted.org/packages/fd/8b/1eeb4025dc1d3ac2f16678f38dec9ebdde6271c74955b72db5ce7a4dbfbd/python-ldap-3.4.4.tar.gz"
+    sha256 "7edb0accec4e037797705f3a05cbf36a9fde50d08c8f67f2aef99a2628fab828"
+  end
+
+  resource "django-auth-ldap" do
+    url "https://files.pythonhosted.org/packages/b8/34/414b93a6be61493e7e271c3ba41894bcc1cfbdb000199d500669c58ee7bb/django-auth-ldap-4.6.0.tar.gz"
+    sha256 "9ae2bf87f9b6367b6cfd94a0451896cbc728e5400ed81cbfbd58ce743c0909a2"
+  end
+
+  # extractors
   resource "yt-dlp" do
     url "https://files.pythonhosted.org/packages/a9/a7/d8536993aed7569c5221f532e3ba01b09d5bdc893df3ef4e5b05d01582c4/yt-dlp-2023.12.30.tar.gz"
     sha256 "a11862e57721b0a0f0883dfeb5a4d79ba213a2d4c45e1880e9fd70f8e6570c38"
@@ -239,16 +256,12 @@ class Archivebox < Formula
     sha256 "b5f3662a058aaf64c640d82f0bfaa8dbe0ef8a3e0b50bd19cbbee67d371c8b69"
   end
 
-  resource "playwright" do
-    url "https://files.pythonhosted.org/packages/e4/40/f69d23fbd8d4c59b9b05578ad2b33745ee34ad33b64133b4a2659cfae071/playwright-1.41.2-py3-none-macosx_11_0_arm64.whl"
-    sha256 "431e3a05f8c99147995e2b3e8475d07818745294fd99f1510b61756e73bdcf68"
-  end
 
   def install
     virtualenv_install_with_resources
     # install + link python extras
-    system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "archivebox[sonic,ldap]"
-    bin.install_symlink Dir["#{libexec}/lib/node_modules/archivebox/node_modules/.bin/{yt-dlp,gallery-dl,playwright}"]
+    system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "archivebox[sonic,ldap]", "yt-dlp", "gallery-dl", "playwright"
+    bin.install_symlink Dir["#{libexec}/bin/{yt-dlp,gallery-dl,playwright}"]
     
     # install + link npm extras
     cd "#{prefix}/libexec/lib/python3.11/site-packages/archivebox/" do
@@ -259,13 +272,16 @@ class Archivebox < Formula
 
   def post_install
     # install most recent versions from PyPI (versions included in package resources are rapidly out of date)
-    system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "playwright"
+    # system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "gallery-dl", "playwright"
 
     # create initial data dir and run init + setup inside
     mkdir_p "#{HOMEBREW_PREFIX}/var/archivebox/data"
     cd "#{HOMEBREW_PREFIX}/var/archivebox/data" do
+      # symlink node_modules into place from libexec
       system "rm", "-Rf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules"
       system "ln", "-sf", "#{libexec}/lib/node_modules/archivebox/node_modules", "#{HOMEBREW_PREFIX}/var/archivebox/data/"
+      
+      # instantialize the collection and create placeholder admin user
       system "#{HOMEBREW_PREFIX}/bin/archivebox", "init"
       quiet_system "#{HOMEBREW_PREFIX}/bin/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
       system "#{HOMEBREW_PREFIX}/bin/archivebox", "setup"
