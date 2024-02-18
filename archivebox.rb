@@ -238,6 +238,7 @@ class Archivebox < Formula
 
   def post_install
     system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "playwright"
+    system "ln", "-sf", "#{prefix}/libexec/bin/archivebox", "#{HOMEBREW_PREFIX}/bin/"
     system "ln", "-sf", "#{prefix}/libexec/bin/yt-dlp", "#{HOMEBREW_PREFIX}/bin/"
     system "ln", "-sf", "#{prefix}/libexec/bin/playwright", "#{HOMEBREW_PREFIX}/bin/"
 
