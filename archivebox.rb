@@ -246,8 +246,8 @@ class Archivebox < Formula
     cd "#{HOMEBREW_PREFIX}/var/archivebox/data" do
       system "#{HOMEBREW_PREFIX}/bin/archivebox", "init"
       quiet_system "#{HOMEBREW_PREFIX}/bin/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
-      system "#{HOMEBREW_PREFIX}/bin/archivebox", "setup"
       system "ln", "-sf", "#{prefix}/libexec/lib/python3.11/site-packages/archivebox/package.json", "#{HOMEBREW_PREFIX}/var/archivebox/data/"
+      system "#{HOMEBREW_PREFIX}/bin/archivebox", "setup"
       system "npm", "install", "--force", "--no-save", "--no-audit"
       system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/single-file", "#{HOMEBREW_PREFIX}/bin/"
       system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/readability-extractor", "#{HOMEBREW_PREFIX}/bin/"
