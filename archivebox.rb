@@ -235,7 +235,7 @@ class Archivebox < Formula
   end
 
   def install
-    #virtualenv_install_with_resources
+    virtualenv_install_with_resources
 
     system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "playwright"
     
