@@ -238,17 +238,17 @@ class Archivebox < Formula
 
   def post_install
     system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "playwright"
-    bin.install_symlink "#{prefix}/libexec/bin/yt-dlp"
-    bin.install_symlink "#{prefix}/libexec/bin/playwright"
+    (HOMEBREW_PREFIX/"bin").install_symlink.install_symlink "#{prefix}/libexec/bin/yt-dlp"
+    (HOMEBREW_PREFIX/"bin").install_symlink.install_symlink "#{prefix}/libexec/bin/playwright"
 
     mkdir_p "#{HOMEBREW_PREFIX}/var/archivebox/data"
     cd "#{HOMEBREW_PREFIX}/var/archivebox/data" do
       system "#{bin}/archivebox", "init"
       quiet_system "#{bin}/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
       system "#{bin}/archivebox", "setup"
-      bin.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/single-file"
-      bin.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/readability-extractor"
-      bin.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/mercury-parser"
+      (HOMEBREW_PREFIX/"bin").install_symlink.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/single-file"
+      (HOMEBREW_PREFIX/"bin").install_symlink.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/readability-extractor"
+      (HOMEBREW_PREFIX/"bin").install_symlink.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/mercury-parser"
       # system "#{bin}/../libexec/bin/playwright", "install", "chromium"
     end
   end
