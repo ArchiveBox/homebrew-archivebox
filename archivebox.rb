@@ -239,12 +239,15 @@ class Archivebox < Formula
   def post_install
     system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "playwright"
     system "mkdir", "-p", "#{HOMEBREW_PREFIX}/var/archivebox/data"
-    system "env", "--chdir=#{HOMEBREW_PREFIX}/var/archivebox/data", "#{bin}/archivebox", "init", "--setup"
+    cd "#{HOMEBREW_PREFIX}/var/archivebox/data" do
+      system "#{bin}/archivebox", "init", "--setup"
+    end
     # system "#{bin}/../libexec/bin/playwright", "install", "chromium"
   end
 
   service do
-    run ["env", "--chdir=#{HOMEBREW_PREFIX}/var/archivebox/data", opt_bin/"archivebox", "server", "--quick-init", "0.0.0.0:8000"]
+    working_dir "#{HOMEBREW_PREFIX}/var/archivebox/data"
+    run [opt_bin/"archivebox", "server", "--quick-init", "0.0.0.0:8000"]
     keep_alive crashed: true
   end
 
