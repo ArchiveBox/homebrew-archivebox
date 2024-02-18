@@ -238,13 +238,17 @@ class Archivebox < Formula
 
   def post_install
     system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "playwright"
+    bin.install_symlink "#{prefix}/libexec/bin/yt-dlp"
+    bin.install_symlink "#{prefix}/libexec/bin/playwright"
+
     system "mkdir", "-p", "#{HOMEBREW_PREFIX}/var/archivebox/data"
     cd "#{HOMEBREW_PREFIX}/var/archivebox/data" do
       system "#{bin}/archivebox", "init"
       system "#{bin}/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
       system "#{bin}/archivebox", "setup"
+      bin.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/*"
+      system "#{bin}/../libexec/bin/playwright", "install", "chromium"
     end
-    # system "#{bin}/../libexec/bin/playwright", "install", "chromium"
   end
 
   service do
