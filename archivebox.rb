@@ -246,8 +246,10 @@ class Archivebox < Formula
       system "#{bin}/archivebox", "init"
       quiet_system "#{bin}/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
       system "#{bin}/archivebox", "setup"
-      bin.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/*"
-      system "#{bin}/../libexec/bin/playwright", "install", "chromium"
+      bin.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/single-file"
+      bin.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/readability-extractor"
+      bin.install_symlink "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/mercury-parser"
+      system "#{bin}/../libexec/bin/playwright", "install", "--with-deps", "--force", "chromium"
     end
   end
 
