@@ -245,13 +245,14 @@ class Archivebox < Formula
     mkdir_p "#{HOMEBREW_PREFIX}/var/archivebox/data"
     cd "#{HOMEBREW_PREFIX}/var/archivebox/data" do
       system "#{HOMEBREW_PREFIX}/bin/archivebox", "init"
-      quiet_system "#{bin}/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
+      quiet_system "#{HOMEBREW_PREFIX}/bin/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
       system "#{HOMEBREW_PREFIX}/bin/archivebox", "setup"
+      system "ln", "-sf", "libexec/lib/python3.11/site-packages/archivebox/package.json", "#{HOMEBREW_PREFIX}/var/archivebox/data/"
+      system "npm", "install", "--force", "--no-save", "--no-audit"
       system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/single-file", "#{HOMEBREW_PREFIX}/bin/"
       system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/readability-extractor", "#{HOMEBREW_PREFIX}/bin/"
       system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/mercury-parser", "#{HOMEBREW_PREFIX}/bin/"
 
-      (HOMEBREW_PREFIX/"bin").install_symlink bin/"*"
       # system "#{bin}/../libexec/bin/playwright", "install", "chromium"
     end
   end
