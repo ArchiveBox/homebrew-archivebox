@@ -237,8 +237,8 @@ class Archivebox < Formula
   end
 
   def post_install
-    system "python3.11", "-m", "pip", "--python=#{bin}/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "playwright"
-    system "#{bin}/python", "-m", "playwright", "install", "--with-deps", "chromium"
+    system "python3.11", "-m", "pip", "--python=#{bin}/../libexec/bin/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "playwright"
+    system "#{bin}/../libexec/bin/python", "-m", "playwright", "install", "--with-deps", "chromium"
     system "#{bin}/archivebox", "setup"
   end
 
