@@ -244,9 +244,9 @@ class Archivebox < Formula
 
     mkdir_p "#{HOMEBREW_PREFIX}/var/archivebox/data"
     cd "#{HOMEBREW_PREFIX}/var/archivebox/data" do
-      system "#{bin}/archivebox", "init"
+      system "#{HOMEBREW_PREFIX}/bin/archivebox", "init"
       quiet_system "#{bin}/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
-      system "#{bin}/archivebox", "setup"
+      system "#{HOMEBREW_PREFIX}/bin/archivebox", "setup"
       system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/single-file", "#{HOMEBREW_PREFIX}/bin/"
       system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/readability-extractor", "#{HOMEBREW_PREFIX}/bin/"
       system "ln", "-sf", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/mercury-parser", "#{HOMEBREW_PREFIX}/bin/"
