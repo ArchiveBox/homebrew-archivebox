@@ -253,6 +253,8 @@ class Archivebox < Formula
     # create initial data dir and run init + setup inside
     mkdir_p "#{HOMEBREW_PREFIX}/var/archivebox/data"
     cd "#{HOMEBREW_PREFIX}/var/archivebox/data" do
+      rm_f "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules"
+      system "ln", "-sf", "#{libexec}/lib/node_modules/archivebox/node_modules", "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules"
       system "#{HOMEBREW_PREFIX}/bin/archivebox", "init"
       quiet_system "#{HOMEBREW_PREFIX}/bin/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
       system "#{HOMEBREW_PREFIX}/bin/archivebox", "setup"
