@@ -238,17 +238,17 @@ class Archivebox < Formula
 
   def post_install
     system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "playwright"
-    ln_s "#{prefix}/libexec/bin/yt-dlp" "#{HOMEBREW_PREFIX}/bin/"
-    ln_s "#{prefix}/libexec/bin/playwright" "#{HOMEBREW_PREFIX}/bin/"
+    ln_s "#{prefix}/libexec/bin/yt-dlp", "#{HOMEBREW_PREFIX}/bin/"
+    ln_s "#{prefix}/libexec/bin/playwright", "#{HOMEBREW_PREFIX}/bin/"
 
     mkdir_p "#{HOMEBREW_PREFIX}/var/archivebox/data"
     cd "#{HOMEBREW_PREFIX}/var/archivebox/data" do
       system "#{bin}/archivebox", "init"
       quiet_system "#{bin}/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
       system "#{bin}/archivebox", "setup"
-      ln_s "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/single-file" "#{HOMEBREW_PREFIX}/bin/"
-      ln_s "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/readability-extractor" "#{HOMEBREW_PREFIX}/bin/"
-      ln_s "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/mercury-parser" "#{HOMEBREW_PREFIX}/bin/"
+      ln_s "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/single-file", "#{HOMEBREW_PREFIX}/bin/"
+      ln_s "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/readability-extractor", "#{HOMEBREW_PREFIX}/bin/"
+      ln_s "#{HOMEBREW_PREFIX}/var/archivebox/data/node_modules/.bin/mercury-parser", "#{HOMEBREW_PREFIX}/bin/"
       # system "#{bin}/../libexec/bin/playwright", "install", "chromium"
     end
   end
