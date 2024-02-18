@@ -259,11 +259,11 @@ class Archivebox < Formula
 
   def install
     virtualenv_install_with_resources
-    # install + link python extras
-    system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "archivebox[sonic,ldap]", "yt-dlp", "gallery-dl", "playwright"
+    # install + link python extras (yt-dlp, gallery-dl, playwright should always be fetched live from most recent version on PyPI at installtime)
+    system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "yt-dlp", "gallery-dl", "playwright"
     bin.install_symlink Dir["#{libexec}/bin/{yt-dlp,gallery-dl,playwright}"]
     
-    # install + link npm extras
+    # install + link npm extras (JS dependencies are also fetched live from package.json at installtime)
     cd "#{prefix}/libexec/lib/python3.11/site-packages/archivebox/" do
       system "npm", "install", *Language::Node.std_npm_install_args(libexec)
     end
@@ -272,7 +272,7 @@ class Archivebox < Formula
 
   def post_install
     # install most recent versions from PyPI (versions included in package resources are rapidly out of date)
-    # system "python3.11", "-m", "pip", "--python=#{prefix}/libexec/bin/python", "install", "--upgrade", "--ignore-installed", "archivebox[sonic,ldap]", "yt-dlp", "gallery-dl", "playwright"
+    system "python3.11", "-m", "pip", "install", "--upgrade", "--ignore-installed", "yt-dlp", "gallery-dl", "playwright"
 
     # create initial data dir and run init + setup inside
     mkdir_p "#{HOMEBREW_PREFIX}/var/archivebox/data"
@@ -285,7 +285,7 @@ class Archivebox < Formula
       system "#{HOMEBREW_PREFIX}/bin/archivebox", "init"
       quiet_system "#{HOMEBREW_PREFIX}/bin/archivebox", "manage", "createsuperuser", "--no-input", "--username=admin", "--email=homebrew-admin@example.local"
       system "#{HOMEBREW_PREFIX}/bin/archivebox", "setup"
-      system "#{HOMEBREW_PREFIX}/bin/playwright", "install", "chromium"
+      # system "#{HOMEBREW_PREFIX}/bin/playwright", "install", "chromium"    # hangs indefinitely for some reason?
     end
   end
 
