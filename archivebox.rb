@@ -272,7 +272,7 @@ class Archivebox < Formula
 
   def post_install
     # install most recent versions from PyPI (versions included in package resources are rapidly out of date)
-    system "python3.11", "-m", "pip", "install", "--upgrade", "--ignore-installed", "yt-dlp", "gallery-dl", "playwright"
+    # system "python3.11", "-m", "pip", "install", "--upgrade", "--ignore-installed", "yt-dlp", "gallery-dl", "playwright"
 
     # create initial data dir and run init + setup inside
     mkdir_p "#{HOMEBREW_PREFIX}/var/archivebox/data"
