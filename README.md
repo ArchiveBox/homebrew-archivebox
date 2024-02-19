@@ -10,14 +10,19 @@ brew tap archivebox/archivebox
 brew install archivebox
 
 # sometimes brew is few minor versions behind latest version, upgrade to latest with pip
-pip install --upgrade --ignore-installed archivebox
+pip install --upgrade --ignore-installed archivebox yt-dlp playwright
 
-mkdir ~/archivebox && cd ~/archivebox  # data folder can be anywhere
+# make sure you have Chrome/Chromium in /Applications, or install it with playwright
+playwright install --with-deps chromium
+
+mkdir -p ~/archivebox/data && cd ~/archivebox/data  # data folder can be anywhere
+archivebox init --setup
 archivebox version
-archivebox init
 archivebox add 'https://example.com'
+archivebox help
 ```
 
+https://github.com/ArchiveBox/ArchiveBox/wiki/Install#option-c-bare-metal-setup
 
 ---
 
