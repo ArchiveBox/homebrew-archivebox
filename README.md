@@ -1,8 +1,36 @@
-# homebrew-archivebox
+> [!IMPORTANT]
+> ## ✨ ArchiveBox no longer needs to be `brew`-installed
+>
+> ✅ ArchiveBox still fully supports macOS, don't worry!  
+> 📦 Just install it using `pip` (or `pipx`) instead now:
+> ```bash
+> mkdir -p ~/archivebox/data
+> cd ~/archivebox/data     # (for example, can be anywhere)
+>
+> pip install archivebox   # just use pip to get archivebox
+> archivebox install       # then finish installing dependencies
+> ```
 
-The official brew.sh formula for [ArchiveBox](https://github.com/ArchiveBox/ArchiveBox), the self-hosted internet archiving solution.
+---
 
-## Quickstart
+## Historical Context
+
+We moved away from `brew` because `pip` provides a simpler install experience for most users.  
+This change also allows us to transition to a new plugin-based architecture where ArchiveBox can add/remove new plugins and their dependencies at runtime.
+
+Now we do something similar to [`playwright`](https://playwright.dev/python/docs/browsers#install-browsers) where the base package is provided via `pip`,
+and then you call `archivebox install` to finish installing any system dependencies that are still needed. ArchiveBox uses our own new [`pydantic-pkgr`](https://github.com/ArchiveBox/pydantic-pkgr) library (*check it out!*) to manage
+it's runtime dependencies, which in turn relies on the excellent [`pyinfra`](https://pyinfra.com/) library (and/or [`ansible`](https://ansible.readthedocs.io/)) to do the actual installing.
+
+### Prefer doing it the old way?
+
+**See here for manual install instructions for all of ArchiveBox's dependencies on macOS:**  
+https://github.com/ArchiveBox/ArchiveBox/wiki/Install#macos
+
+<details>
+<summary>Or expand to see old README for this repo (only useful for historical context)</summary>
+
+## ~~Quickstart~~
 
 ```bash
 # 🧙‍♀️ ✨ the magic incantation
@@ -26,13 +54,13 @@ https://github.com/ArchiveBox/ArchiveBox/wiki/Install#option-c-bare-metal-setup
 
 ---
 
-Tested on macOS >= 11. (Linux users should install via [`apt`/`deb`](https://launchpad.net/~archivebox/+archive/ubuntu/archivebox/+packages) or `pip` instead)
+~~Tested on macOS >= 11. (Linux users should install via [`apt`/`deb`](https://launchpad.net/~archivebox/+archive/ubuntu/archivebox/+packages) or `pip` instead)~~
 
 
-## Development
+## ~~Development~~
 
 
-Make sure you're in the main ArchiveBox repo folder first.
+~~Make sure you're in the main ArchiveBox repo folder first.~~
 ```bash
 cd ArchiveBox/
 git submodule update --init --recursive
@@ -56,3 +84,5 @@ git push origin main
 ./bin/build_brew.sh
 ./bin/release_brew.sh
 ```
+
+</details>
