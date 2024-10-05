@@ -19,8 +19,10 @@ We moved away from `brew` because `pip` provides a simpler install experience fo
 This change also allows us to transition to a new plugin-based architecture where ArchiveBox can add/remove new plugins and their dependencies at runtime.
 
 Now we do something similar to [`playwright`](https://playwright.dev/python/docs/browsers#install-browsers) where the base package is provided via `pip`,
-and then you call `archivebox install` to finish installing any system dependencies that are still needed. ArchiveBox uses our own new [`pydantic-pkgr`](https://github.com/ArchiveBox/pydantic-pkgr) library (*check it out!*) to manage
-it's runtime dependencies, which in turn relies on the excellent [`pyinfra`](https://pyinfra.com/) library (and/or [`ansible`](https://ansible.readthedocs.io/)) to do the actual installing.
+and then you call `archivebox install` to finish installing any system dependencies that are still needed.
+
+ArchiveBox uses our own new [`pydantic-pkgr`](https://github.com/ArchiveBox/pydantic-pkgr) library (*check it out!*) to manage
+its runtime dependencies, which in turn relies on the excellent [`pyinfra`](https://pyinfra.com/) library (and/or [`ansible`](https://ansible.readthedocs.io/)) to do the actual installing.
 
 ### Prefer doing it the old way?
 
