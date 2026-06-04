@@ -1,0 +1,42 @@
+name: Update ArchiveBox dev formula
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [archivebox-dev-updated]
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-archivebox-dev-formula
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Update formula
+        id: update
+        run: bin/build_brew.sh
+
+      - name: Validate formula syntax
+        run: ruby -c Formula/archivebox.rb
+
+      - name: Commit formula update
+        if: steps.update.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/archivebox.rb
+          git commit -m "Update ArchiveBox dev formula to ${{ steps.update.outputs.formula_version }}"
+          git push
