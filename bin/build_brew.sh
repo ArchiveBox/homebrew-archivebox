@@ -74,7 +74,7 @@ def formula_template(version: str, commit: str, commit_epoch: int) -> str:
 
             system python, "-m", "venv", venv
             system venv/"bin/python", "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"
-            system venv/"bin/python", "-m", "pip", "install", "."
+            system venv/"bin/python", "-m", "pip", "install", "--no-binary", "cbor2", "."
 
             bin.install_symlink venv/"bin/archivebox"
           end
