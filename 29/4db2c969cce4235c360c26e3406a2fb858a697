@@ -1,0 +1,21 @@
+bin/build_brew.sh
+  s_7cc75db5230061::t_4ab4a9b561c37d 81-83
+Formula/archivebox.rb
+  s_7cc75db5230061::t_4ab4a9b561c37d 25-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "294db2c969cce4235c360c26e3406a2fb858a697",
+  "prompts": {},
+  "sessions": {
+    "s_7cc75db5230061": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e9181-9d0e-7f61-a8dc-95dc82bc59e7",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Nick Sweeting <git@sweeting.me>"
+    }
+  }
+}
