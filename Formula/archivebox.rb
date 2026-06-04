@@ -22,8 +22,9 @@ class Archivebox < Formula
     (buildpath/"homebrew-constraints.txt").write("cbor2<6\n")
     system venv/"bin/python", "-m", "pip", "install", "--constraint", buildpath/"homebrew-constraints.txt", "."
 
-    site_packages_cmd = "#{venv}/bin/python -c 'import site; print(site.getsitepackages()[0])'"
-    site_packages = Pathname(shell_output(site_packages_cmd).strip)
+    site_packages = Pathname(
+      Utils.safe_popen_read(venv/"bin/python", "-c", "import site; print(site.getsitepackages()[0])").strip,
+    )
     (site_packages/".git/refs/heads").mkpath
     (site_packages/".git/HEAD").write("ref: refs/heads/dev\n")
     (site_packages/".git/refs/heads/dev").write("#{archivebox_revision}\n")
