@@ -5,8 +5,8 @@ class Archivebox < Formula
   desc "Self-hosted internet archiving solution"
   homepage "https://archivebox.io"
   url "https://github.com/ArchiveBox/ArchiveBox.git",
-      revision: "8367578f9b7f04a3f75289442c5b0b946c3a1358"
-  version "0.9.34rc55.20260604150025"
+      revision: "ba895db80ea60639b89211311652ea47921e9178"
+  version "0.9.34rc58.20260604162018"
   license "MIT"
   head "https://github.com/ArchiveBox/ArchiveBox.git", branch: "dev"
 
@@ -46,6 +46,6 @@ class Archivebox < Formula
   end
 
   test do
-    assert_match "0.9.34rc55", shell_output("#{bin}/archivebox version")
+    assert_match "0.9.34rc58", shell_output("#{bin}/archivebox version")
   end
 end
