@@ -18,7 +18,8 @@ class Archivebox < Formula
 
     system python, "-m", "venv", venv
     system venv/"bin/python", "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"
-    system venv/"bin/python", "-m", "pip", "install", "--no-binary", "cbor2", "."
+    (buildpath/"homebrew-constraints.txt").write("cbor2<6\n")
+    system venv/"bin/python", "-m", "pip", "install", "--constraint", buildpath/"homebrew-constraints.txt", "."
 
     bin.install_symlink venv/"bin/archivebox"
   end
