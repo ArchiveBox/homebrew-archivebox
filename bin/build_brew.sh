@@ -71,11 +71,18 @@ def formula_template(version: str, commit: str, commit_epoch: int) -> str:
           def install
             venv = libexec/"venv"
             python = Formula["python@3.13"].opt_bin/"python3.13"
+            archivebox_revision = stable.specs.fetch(:revision)
 
             system python, "-m", "venv", venv
             system venv/"bin/python", "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"
             (buildpath/"homebrew-constraints.txt").write("cbor2<6\\n")
             system venv/"bin/python", "-m", "pip", "install", "--constraint", buildpath/"homebrew-constraints.txt", "."
+
+            site_packages_cmd = "#{{venv}}/bin/python -c 'import site; print(site.getsitepackages()[0])'"
+            site_packages = Pathname(shell_output(site_packages_cmd).strip)
+            (site_packages/".git/refs/heads").mkpath
+            (site_packages/".git/HEAD").write("ref: refs/heads/dev\\n")
+            (site_packages/".git/refs/heads/dev").write("#{{archivebox_revision}}\\n")
 
             bin.install_symlink venv/"bin/archivebox"
           end
@@ -83,7 +90,7 @@ def formula_template(version: str, commit: str, commit_epoch: int) -> str:
           def caveats
             <<~EOS
               ArchiveBox is installed from ArchiveBox/ArchiveBox@dev:
-                {commit}
+                #{{stable.specs.fetch(:revision)}}
 
               To create a collection and install runtime extractors:
                 mkdir -p ~/archivebox/data
