@@ -1,0 +1,31 @@
+README.md
+  s_7cc75db5230061::t_f7a331c08d1d23 1,7-10,13-14,16,18,20,22-23,25
+  s_7cc75db5230061::t_99353e32d766a7 21
+  s_7cc75db5230061::t_c351f798cf286a 26-27
+.github/workflows/update-archivebox-dev.yml
+  s_7cc75db5230061::t_99353e32d766a7 30
+  s_7cc75db5230061::t_f7a331c08d1d23 1-29,31-42
+Formula/archivebox.rb
+  s_7cc75db5230061::t_99353e32d766a7 1
+  s_7cc75db5230061::t_f7a331c08d1d23 2-3,7,11-14,16-18,22-39
+  s_7cc75db5230061::t_c351f798cf286a 19-21
+bin/build_brew.sh
+  s_7cc75db5230061::t_99353e32d766a7 2-57
+  s_7cc75db5230061::t_c351f798cf286a 75-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "965e955c9c5155b69215477298af5aa63bf26e57",
+  "prompts": {},
+  "sessions": {
+    "s_7cc75db5230061": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e9181-9d0e-7f61-a8dc-95dc82bc59e7",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Nick Sweeting <git@sweeting.me>"
+    }
+  }
+}
