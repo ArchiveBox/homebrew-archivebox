@@ -5,8 +5,8 @@ class Archivebox < Formula
   desc "Self-hosted internet archiving solution"
   homepage "https://archivebox.io"
   url "https://github.com/ArchiveBox/ArchiveBox.git",
-      revision: "0c984651a3af8b761c440290ed77096a09f7b6e5"
-  version "0.9.34rc59.20260607002842"
+      revision: "a25adf22eb5cfe1512025bdf0006aa68e4892736"
+  version "0.9.34rc59.20260607034121"
   license "MIT"
   head "https://github.com/ArchiveBox/ArchiveBox.git", branch: "dev"
 
