@@ -32,6 +32,67 @@ jobs:
       - name: Validate formula syntax
         run: ruby -c Formula/archivebox.rb
 
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Wait for ArchiveBox dependency wheels
+        run: |
+          set -Eeuo pipefail
+          python - <<'PY'
+          import re
+          import subprocess
+          import sys
+          import tempfile
+          import time
+          import tomllib
+          import urllib.request
+          from pathlib import Path
+
+          with tempfile.TemporaryDirectory(prefix="archivebox-dev-") as tmpdir:
+              checkout = Path(tmpdir) / "ArchiveBox"
+              subprocess.check_call([
+                  "git",
+                  "clone",
+                  "--depth=1",
+                  "--branch=dev",
+                  "--filter=blob:none",
+                  "https://github.com/ArchiveBox/ArchiveBox.git",
+                  str(checkout),
+              ])
+              deps = tomllib.loads((checkout / "pyproject.toml").read_text())["project"]["dependencies"]
+
+          watched = {"abxbus", "abxpkg", "abx-plugins", "abx-dl"}
+          required = {}
+          for dep in deps:
+              for name in watched:
+                  match = re.match(rf"{re.escape(name)}\s*(==|>=)\s*([^,;\s]+)", dep)
+                  if match:
+                      required[name] = match.group(2)
+
+          deadline = time.monotonic() + 600
+          missing = required.copy()
+          while missing and time.monotonic() < deadline:
+              for name, version in list(missing.items()):
+                  try:
+                      with urllib.request.urlopen(f"https://pypi.org/pypi/{name}/{version}/json", timeout=20):
+                          print(f"{name} {version} is available on PyPI")
+                          missing.pop(name)
+                  except Exception:
+                      print(f"{name} {version} is not available on PyPI yet")
+              if missing:
+                  time.sleep(10)
+
+          if missing:
+              print(f"Missing PyPI releases after wait: {missing}", file=sys.stderr)
+              sys.exit(1)
+          PY
+
+      - name: Install and test formula
+        run: |
+          set -Eeuo pipefail
+          brew install --build-from-source ./Formula/archivebox.rb
+          brew test archivebox
+
       - name: Commit formula update
         if: steps.update.outputs.changed == 'true'
         run: |

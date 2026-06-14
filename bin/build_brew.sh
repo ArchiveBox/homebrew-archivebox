@@ -102,7 +102,13 @@ def formula_template(version: str, commit: str, commit_epoch: int) -> str:
           end
 
           test do
-            assert_match "{version}", shell_output("#{{bin}}/archivebox version")
+            (testpath/"data").mkpath
+            cd testpath/"data" do
+              system "#{{bin}}/archivebox", "init"
+              system "#{{bin}}/archivebox", "install"
+              assert_match "{version}", shell_output("#{{bin}}/archivebox version")
+              system "#{{bin}}/archivebox", "status"
+            end
           end
         end
         """
