@@ -1,0 +1,22 @@
+bin/build_brew.sh
+  s_70b3b8284ef391::t_753b4fb89b3601 105-111
+.github/workflows/update-archivebox-dev.yml
+  s_70b3b8284ef391::t_753b4fb89b3601 35,37-95
+  s_70b3b8284ef391::t_0a6292a804dccb 36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "b1fede32bdb8ad7ce793d8428c5cd83dbb3247e4",
+  "prompts": {},
+  "sessions": {
+    "s_70b3b8284ef391": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019ec4bb-38fe-7723-b66e-d0af77a36fd0",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Nick Sweeting <git@sweeting.me>"
+    }
+  }
+}
