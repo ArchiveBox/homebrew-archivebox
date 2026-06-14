@@ -33,7 +33,7 @@ jobs:
         run: ruby -c Formula/archivebox.rb
 
       - name: Set up Homebrew
-        uses: Homebrew/actions/setup-homebrew@master
+        uses: Homebrew/actions/setup-homebrew@main
 
       - name: Wait for ArchiveBox dependency wheels
         run: |
@@ -90,8 +90,9 @@ jobs:
       - name: Install and test formula
         run: |
           set -Eeuo pipefail
-          brew install --build-from-source ./Formula/archivebox.rb
-          brew test archivebox
+          brew tap ArchiveBox/archivebox "$PWD"
+          brew install --build-from-source ArchiveBox/archivebox/archivebox
+          brew test ArchiveBox/archivebox/archivebox
 
       - name: Commit formula update
         if: steps.update.outputs.changed == 'true'
