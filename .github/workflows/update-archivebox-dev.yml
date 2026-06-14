@@ -90,6 +90,7 @@ jobs:
       - name: Install and test formula
         run: |
           set -Eeuo pipefail
+          brew untap ArchiveBox/archivebox || true
           brew tap ArchiveBox/archivebox "$PWD"
           brew install --build-from-source ArchiveBox/archivebox/archivebox
           brew test ArchiveBox/archivebox/archivebox
