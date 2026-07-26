@@ -66,11 +66,19 @@ def formula_template(version: str, commit: str, commit_epoch: int) -> str:
           license "MIT"
           head "https://github.com/ArchiveBox/ArchiveBox.git", branch: "dev"
 
+          depends_on "libpq"
           depends_on "python@3.13"
 
           def install
             venv = libexec/"venv"
             python = Formula["python@3.13"].opt_bin/"python3.13"
+
+            # Homebrew relocates installed Mach-O dylibs after formula install.
+            # psycopg-binary ships bundled dylibs with too little header padding
+            # for that relocation, so build the libpq-backed C implementation
+            # from source for the Homebrew formula only.
+            inreplace "pyproject.toml", "psycopg[binary]>=3.2", "psycopg[c]>=3.2"
+            ENV.prepend_path "PATH", Formula["libpq"].opt_bin
 
             system python, "-m", "venv", venv
             system venv/"bin/python", "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"
