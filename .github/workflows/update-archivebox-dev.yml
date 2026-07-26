@@ -90,8 +90,17 @@ jobs:
       - name: Install and test formula
         run: |
           set -Eeuo pipefail
-          brew install --build-from-source "$PWD/Formula/archivebox.rb"
-          brew test archivebox
+          tap_root="$(brew --repository)/Library/Taps/archivebox/homebrew-archivebox"
+          mkdir -p "$(dirname "$tap_root")"
+          if [[ -L "$tap_root" ]]; then
+            rm "$tap_root"
+          elif [[ -e "$tap_root" ]]; then
+            echo "Unexpected non-symlink tap path: $tap_root" >&2
+            exit 1
+          fi
+          ln -s "$PWD" "$tap_root"
+          brew install --build-from-source ArchiveBox/archivebox/archivebox
+          brew test ArchiveBox/archivebox/archivebox
 
       - name: Commit formula update
         if: steps.update.outputs.changed == 'true'
