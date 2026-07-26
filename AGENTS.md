@@ -1,14 +1,50 @@
-I found 31 unique `no mocking` prompts in recent Codex history, across 21 session transcripts. Only one transcript literally started with `no mocking`; most had it later as testing guidance. Consolidated advice:
+# Homebrew ArchiveBox Agent Guide
 
-- Tests must hit real user-facing code paths: CLI commands, REST/API calls, browser UI, real hooks, real ArchiveBox data dirs, real pytest fixtures, and real subprocess/binary behavior.
-- No mocking, faking, simulating, monkey patching, handwritten fake objects, fake buses, fake hooks, fake binaries, fake handlers, or direct-post shortcuts when the user path is through UI/extension/CLI.
-- No skipped, xfailed, flaky, or “works around platform” tests. Flakiness is treated as a bug, especially on macOS/browser flows.
-- Prefer live integration tests over narrow unit tests when behavior depends on browsers, binaries, ArchiveBox crawls, plugins, LLMs, or server state.
-- Assertions must validate real correctness: returned values, exit codes, DB rows, filesystem contents, field values, uploaded files, rendered output, and side effects. “No error occurred” or “attribute exists” is not enough.
-- Start fixes with failing red tests that reproduce the missing behavior or regression, then implement the minimal fix and confirm the test passes.
-- Use realistic setup patterns “like a user would”: events + bus + handlers, real browser pages/CDP sessions, real URLs or `pytest-httpserver`, real rows, real snapshots, real installs, real local browser/server state.
-- For ArchiveBox/API tests, use existing `conftest.py` fixtures and test harnesses, real test DB rows/data dirs, and user-facing commands/APIs rather than bespoke helpers.
-- For browser/extension tests, trigger behavior through the real extension UI or actual browser session, not direct posting or mocked browser/session objects.
-- For binary/provider tests, use real binaries and real installs; verify constraints and final installed package metadata, not just install success.
-- For coverage quality, keep tests strict, deterministic, grouped consistently, and use a few larger realistic tests when that gives better surface coverage than many tiny fake unit tests.
-- Avoid weakening test coverage, adding compatibility/shim/fallback layers, or guessing from code shape. Trace root causes, verify assumptions with tests/scripts, and let real type/parse errors surface normally.
+This repo is the Homebrew tap for ArchiveBox. Keep this repo on `main`.
+
+## Shared Standards
+
+- Use `uv` and `uv run` for Python commands. Do not use system `python`, direct `.venv/bin/python`, or `pip` commands.
+- Prefer existing repo patterns, helper APIs, fixtures, scripts, and command surfaces.
+- Keep edits focused and minimal. Do not add wrappers, shims, aliases, or extra abstraction layers unless the current code path requires them.
+- Do not weaken assertions, skip tests, xfail tests, or accept flaky behavior.
+- No mocks, monkeypatches, fakes, simulated package managers, fake binaries, fake install processes, or direct shortcuts around user-facing flows.
+- Tests and verification should use real build scripts, real Homebrew commands where applicable, real CLI commands, real files, and real ArchiveBox collection behavior.
+- Assertions must verify real correctness: formula content, installed paths, exit codes, ArchiveBox CLI output, DB state, filesystem contents, and side effects.
+- Start behavior fixes with a red failing test when a test is requested or practical.
+- Trace root causes from observed behavior. Do not paper over failures with retries, wider timeouts, broad fallbacks, or looser assertions.
+- Read `README.md` for the full formula build, install, verification, and publishing surface.
+
+## Development Setup
+
+```bash
+./bin/build_brew.sh
+```
+
+## User-Facing Setup
+
+Recommended ArchiveBox install:
+
+```bash
+uv tool install archivebox
+mkdir -p ~/archivebox/data
+cd ~/archivebox/data
+archivebox init --install
+archivebox add 'https://example.com'
+```
+
+Alternative install methods:
+
+- Docker Compose / Docker
+- Homebrew
+- Debian package
+- pip
+
+## Basic Usage
+
+```bash
+./bin/build_brew.sh
+sed -n '1,180p' Formula/archivebox.rb
+```
+
+Formula maintenance should stay small and should delegate runtime dependency work to `archivebox install`.

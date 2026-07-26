@@ -5,8 +5,8 @@ class Archivebox < Formula
   desc "Self-hosted internet archiving solution"
   homepage "https://archivebox.io"
   url "https://github.com/ArchiveBox/ArchiveBox.git",
-      revision: "311d333b4b1a25d8d669a2946c95588f53ffe426"
-  version "0.9.35rc37.20260614163515"
+      revision: "0a7d6b31044b497cf0d72e29e12fdd912c553ee7"
+  version "0.9.35rc142.20260726043533"
   license "MIT"
   head "https://github.com/ArchiveBox/ArchiveBox.git", branch: "dev"
 
@@ -15,19 +15,11 @@ class Archivebox < Formula
   def install
     venv = libexec/"venv"
     python = Formula["python@3.13"].opt_bin/"python3.13"
-    archivebox_revision = stable.specs.fetch(:revision)
 
     system python, "-m", "venv", venv
     system venv/"bin/python", "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"
     (buildpath/"homebrew-constraints.txt").write("cbor2<6\n")
     system venv/"bin/python", "-m", "pip", "install", "--constraint", buildpath/"homebrew-constraints.txt", "."
-
-    site_packages = Pathname(
-      Utils.safe_popen_read(venv/"bin/python", "-c", "import site; print(site.getsitepackages()[0])").strip,
-    )
-    (site_packages/".git/refs/heads").mkpath
-    (site_packages/".git/HEAD").write("ref: refs/heads/dev\n")
-    (site_packages/".git/refs/heads/dev").write("#{archivebox_revision}\n")
 
     bin.install_symlink venv/"bin/archivebox"
   end
@@ -46,6 +38,12 @@ class Archivebox < Formula
   end
 
   test do
-    assert_match "0.9.35rc37", shell_output("#{bin}/archivebox version")
+    (testpath/"data").mkpath
+    cd testpath/"data" do
+      system "#{bin}/archivebox", "init"
+      system "#{bin}/archivebox", "install"
+      assert_match "0.9.35rc142", shell_output("#{bin}/archivebox version")
+      system "#{bin}/archivebox", "status"
+    end
   end
 end
