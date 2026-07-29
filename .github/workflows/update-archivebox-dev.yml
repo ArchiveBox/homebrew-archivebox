@@ -16,8 +16,6 @@ on:
       archivebox_wheel_url:
         description: "Verified ArchiveBox wheel URL"
         required: false
-  repository_dispatch:
-    types: [archivebox-release]
 
 permissions:
   contents: write
@@ -43,8 +41,8 @@ jobs:
       - name: Update formula
         id: update
         env:
-          ARCHIVEBOX_REF: ${{ inputs.archivebox_ref || github.event.client_payload.ref || 'dev' }}
-          ARCHIVEBOX_SHA: ${{ inputs.archivebox_sha || github.event.client_payload.sha || '' }}
+          ARCHIVEBOX_REF: ${{ inputs.archivebox_ref }}
+          ARCHIVEBOX_SHA: ${{ inputs.archivebox_sha }}
         run: bin/build_brew.sh
 
       - name: Validate formula syntax
