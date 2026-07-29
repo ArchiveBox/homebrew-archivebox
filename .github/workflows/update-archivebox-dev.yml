@@ -76,4 +76,4 @@ jobs:
             exit 1
           fi
           git commit -m "Update ArchiveBox dev formula to ${{ steps.update.outputs.formula_version }}"
-          git push
+          git push origin HEAD:main
