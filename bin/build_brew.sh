@@ -77,26 +77,26 @@ def formula_template(version: str, commit: str, commit_epoch: int) -> str:
           license "MIT"
           head "https://github.com/ArchiveBox/ArchiveBox.git", branch: "dev"
 
-          depends_on "libpq"
-          depends_on "python@3.13"
+          depends_on "uv"
+
+          # uv installs the normal ArchiveBox package into an isolated tool
+          # environment. Keep Homebrew's cleaner away from wheel-owned dylibs.
+          skip_clean "libexec"
 
           def install
-            venv = libexec/"venv"
-            python = Formula["python@3.13"].opt_bin/"python3.13"
-
-            # Homebrew relocates installed Mach-O dylibs after formula install.
-            # psycopg-binary ships bundled dylibs with too little header padding
-            # for that relocation, so build the libpq-backed C implementation
-            # from source for the Homebrew formula only.
-            inreplace "pyproject.toml", "psycopg[binary]>=3.2", "psycopg[c]>=3.2"
-            ENV.prepend_path "PATH", Formula["libpq"].opt_bin
-
-            system python, "-m", "venv", venv
-            system venv/"bin/python", "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"
+            ENV["UV_TOOL_DIR"] = libexec/"tools"
+            ENV["UV_TOOL_BIN_DIR"] = libexec/"bin"
+            ENV["UV_PYTHON_INSTALL_DIR"] = libexec/"python"
             (buildpath/"homebrew-constraints.txt").write("cbor2<6\\n")
-            system venv/"bin/python", "-m", "pip", "install", "--constraint", buildpath/"homebrew-constraints.txt", "."
+            system Formula["uv"].opt_bin/"uv",
+                   "tool", "install",
+                   "--no-cache",
+                   "--managed-python",
+                   "--python", "3.13",
+                   "--constraints", buildpath/"homebrew-constraints.txt",
+                   "."
 
-            bin.install_symlink venv/"bin/archivebox"
+            bin.install_symlink libexec/"bin/archivebox"
           end
 
           def caveats
