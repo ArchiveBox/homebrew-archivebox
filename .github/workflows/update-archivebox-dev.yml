@@ -31,12 +31,15 @@ jobs:
         run: bin/build_brew.sh
 
       - name: Validate formula syntax
+        if: steps.update.outputs.changed == 'true'
         run: ruby -c Formula/archivebox.rb
 
       - name: Set up Homebrew
+        if: steps.update.outputs.changed == 'true'
         uses: Homebrew/actions/setup-homebrew@main
 
       - name: Install and test formula
+        if: steps.update.outputs.changed == 'true'
         run: |
           set -Eeuo pipefail
           tap_root="$(brew --repository)/Library/Taps/archivebox/homebrew-archivebox"
