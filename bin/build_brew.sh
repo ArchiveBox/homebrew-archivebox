@@ -6,23 +6,14 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import shutil
-import subprocess
 import sys
-import tempfile
 import textwrap
-import tomllib
 import urllib.request
 from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 FORMULA_PATH = REPO_ROOT / "Formula" / "archivebox.rb"
-ARCHIVEBOX_REPO = "https://github.com/ArchiveBox/ArchiveBox.git"
-
-
-def run(*args: str, cwd: Path | None = None) -> str:
-    return subprocess.check_output(args, cwd=cwd, text=True).strip()
 
 
 def github_output(**values: str) -> None:
@@ -32,32 +23,6 @@ def github_output(**values: str) -> None:
     with open(output_path, "a", encoding="utf-8") as output:
         for key, value in values.items():
             output.write(f"{key}={value}\n")
-
-
-def clone_archivebox() -> tuple[Path, tempfile.TemporaryDirectory[str]]:
-    ref = os.environ.get("ARCHIVEBOX_REF", "dev")
-    sha = os.environ.get("ARCHIVEBOX_SHA", "")
-    tmpdir = tempfile.TemporaryDirectory(prefix="archivebox-dev-")
-    checkout = Path(tmpdir.name) / "ArchiveBox"
-    run(
-        "git",
-        "clone",
-        "--depth=1",
-        "--branch",
-        ref,
-        "--filter=blob:none",
-        ARCHIVEBOX_REPO,
-        str(checkout),
-    )
-    if sha:
-        actual_sha = run("git", "rev-parse", "HEAD", cwd=checkout)
-        if actual_sha != sha:
-            run("git", "fetch", "--depth=1", "origin", sha, cwd=checkout)
-            run("git", "checkout", "--detach", sha, cwd=checkout)
-        actual_sha = run("git", "rev-parse", "HEAD", cwd=checkout)
-        if actual_sha != sha:
-            raise RuntimeError(f"ArchiveBox {ref} resolved to {actual_sha}, expected {sha}")
-    return checkout, tmpdir
 
 
 def formula_template(version: str, wheel_url: str, wheel_sha256: str) -> str:
@@ -112,12 +77,6 @@ def formula_template(version: str, wheel_url: str, wheel_sha256: str) -> str:
 
 
 def published_wheel(version: str) -> tuple[str, str]:
-    requested_version = os.environ.get("ARCHIVEBOX_VERSION", "")
-    if requested_version and requested_version != version:
-        raise RuntimeError(
-            f"ArchiveBox checkout is {version}, dispatched version was {requested_version}",
-        )
-
     with urllib.request.urlopen(
         f"https://pypi.org/pypi/archivebox/{version}/json",
         timeout=20,
@@ -137,17 +96,11 @@ def published_wheel(version: str) -> tuple[str, str]:
 
 
 def update_formula(check: bool) -> int:
-    checkout, tmpdir = clone_archivebox()
-    try:
-        pyproject = tomllib.loads((checkout / "pyproject.toml").read_text(encoding="utf-8"))
-        version = pyproject["project"]["version"]
-        commit = run("git", "rev-parse", "HEAD", cwd=checkout)
-        short_commit = commit[:12]
-        wheel_url, wheel_sha256 = published_wheel(version)
-        formula_version = version
-        new_formula = formula_template(version, wheel_url, wheel_sha256)
-    finally:
-        tmpdir.cleanup()
+    version = os.environ.get("ARCHIVEBOX_VERSION", "")
+    if not version:
+        raise RuntimeError("ARCHIVEBOX_VERSION is required")
+    wheel_url, wheel_sha256 = published_wheel(version)
+    new_formula = formula_template(version, wheel_url, wheel_sha256)
 
     old_formula = FORMULA_PATH.read_text(encoding="utf-8") if FORMULA_PATH.exists() else ""
     changed = old_formula != new_formula
@@ -155,9 +108,7 @@ def update_formula(check: bool) -> int:
     github_output(
         changed=str(changed).lower(),
         archivebox_version=version,
-        archivebox_commit=commit,
-        archivebox_short_commit=short_commit,
-        formula_version=formula_version,
+        formula_version=version,
     )
 
     if check and changed:
@@ -167,9 +118,9 @@ def update_formula(check: bool) -> int:
     if changed:
         FORMULA_PATH.parent.mkdir(parents=True, exist_ok=True)
         FORMULA_PATH.write_text(new_formula, encoding="utf-8")
-        print(f"Updated {FORMULA_PATH.relative_to(REPO_ROOT)} to {formula_version} ({short_commit})")
+        print(f"Updated {FORMULA_PATH.relative_to(REPO_ROOT)} to {version}")
     else:
-        print(f"{FORMULA_PATH.relative_to(REPO_ROOT)} already tracks {formula_version} ({short_commit})")
+        print(f"{FORMULA_PATH.relative_to(REPO_ROOT)} already tracks {version}")
 
     return 0
 
@@ -178,10 +129,6 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true", help="fail if Formula/archivebox.rb is stale")
     args = parser.parse_args()
-
-    if not shutil.which("git"):
-        print("git is required", file=sys.stderr)
-        return 127
 
     return update_formula(check=args.check)
 
