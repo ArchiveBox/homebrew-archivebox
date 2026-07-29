@@ -27,6 +27,9 @@ jobs:
 
       - name: Update formula
         id: update
+        env:
+          ARCHIVEBOX_REF: ${{ github.event.client_payload.ref || 'dev' }}
+          ARCHIVEBOX_SHA: ${{ github.event.client_payload.sha || '' }}
         run: bin/build_brew.sh
 
       - name: Validate formula syntax
@@ -36,9 +39,13 @@ jobs:
         uses: Homebrew/actions/setup-homebrew@main
 
       - name: Wait for ArchiveBox dependency wheels
+        env:
+          ARCHIVEBOX_REF: ${{ github.event.client_payload.ref || 'dev' }}
+          ARCHIVEBOX_SHA: ${{ github.event.client_payload.sha || '' }}
         run: |
           set -Eeuo pipefail
           python - <<'PY'
+          import os
           import re
           import subprocess
           import sys
@@ -54,11 +61,18 @@ jobs:
                   "git",
                   "clone",
                   "--depth=1",
-                  "--branch=dev",
+                  "--branch",
+                  os.environ.get("ARCHIVEBOX_REF", "dev"),
                   "--filter=blob:none",
                   "https://github.com/ArchiveBox/ArchiveBox.git",
                   str(checkout),
               ])
+              expected_sha = os.environ.get("ARCHIVEBOX_SHA", "")
+              if expected_sha:
+                  actual_sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=checkout, text=True).strip()
+                  if actual_sha != expected_sha:
+                      subprocess.check_call(["git", "fetch", "--depth=1", "origin", expected_sha], cwd=checkout)
+                      subprocess.check_call(["git", "checkout", "--detach", expected_sha], cwd=checkout)
               deps = tomllib.loads((checkout / "pyproject.toml").read_text())["project"]["dependencies"]
 
           watched = {"abxbus", "abxpkg", "abx-plugins", "abx-dl"}
