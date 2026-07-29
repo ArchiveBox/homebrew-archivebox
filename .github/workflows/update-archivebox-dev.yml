@@ -2,6 +2,20 @@ name: Update ArchiveBox formula
 
 on:
   workflow_dispatch:
+    inputs:
+      archivebox_ref:
+        description: "ArchiveBox ref to package"
+        required: false
+        default: "dev"
+      archivebox_sha:
+        description: "Exact ArchiveBox commit SHA"
+        required: false
+      archivebox_version:
+        description: "Exact ArchiveBox version"
+        required: false
+      archivebox_wheel_url:
+        description: "Verified ArchiveBox wheel URL"
+        required: false
   repository_dispatch:
     types: [archivebox-release]
 
@@ -26,8 +40,8 @@ jobs:
       - name: Update formula
         id: update
         env:
-          ARCHIVEBOX_REF: ${{ github.event.client_payload.ref || 'dev' }}
-          ARCHIVEBOX_SHA: ${{ github.event.client_payload.sha || '' }}
+          ARCHIVEBOX_REF: ${{ inputs.archivebox_ref || github.event.client_payload.ref || 'dev' }}
+          ARCHIVEBOX_SHA: ${{ inputs.archivebox_sha || github.event.client_payload.sha || '' }}
         run: bin/build_brew.sh
 
       - name: Validate formula syntax
