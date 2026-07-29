@@ -4,9 +4,9 @@
 class Archivebox < Formula
   desc "Self-hosted internet archiving solution"
   homepage "https://archivebox.io"
-  url "https://files.pythonhosted.org/packages/43/d5/3cd25acac7ba61f97f4b4c8effe18313bde5b098bfcbdb64933c54ab8c1b/archivebox-0.9.35rc175-py3-none-any.whl"
-  sha256 "505e208d4fbc46d36366659926c68fe8188e26dd2a80f4e76eda59e109dc8fd9"
-  version "0.9.35rc175"
+  url "https://files.pythonhosted.org/packages/60/e3/4474bfd1cd608c2dc97f931e01120cfc4e8698e0ecd8c5b88c6e72c4af18/archivebox-0.9.35rc180-py3-none-any.whl"
+  sha256 "2085d94a6236b9204102c9c5fea6d9d552c9209d2d52d355134a79df46d8a1e7"
+  version "0.9.35rc180"
   license "MIT"
 
   depends_on "uv"
@@ -14,14 +14,14 @@ class Archivebox < Formula
   def install
     (bin/"archivebox").write <<~SH
       #!/bin/sh
-      exec "#{Formula["uv"].opt_bin}/uv" tool run --from "https://files.pythonhosted.org/packages/43/d5/3cd25acac7ba61f97f4b4c8effe18313bde5b098bfcbdb64933c54ab8c1b/archivebox-0.9.35rc175-py3-none-any.whl" archivebox "$@"
+      exec "#{Formula["uv"].opt_bin}/uv" tool run --from "https://files.pythonhosted.org/packages/60/e3/4474bfd1cd608c2dc97f931e01120cfc4e8698e0ecd8c5b88c6e72c4af18/archivebox-0.9.35rc180-py3-none-any.whl" archivebox "$@"
     SH
     chmod 0755, bin/"archivebox"
   end
 
   def caveats
     <<~EOS
-      ArchiveBox 0.9.35rc175 runs from its verified PyPI wheel through uv.
+      ArchiveBox 0.9.35rc180 runs from its verified PyPI wheel through uv.
 
       To create a collection and install runtime extractors:
         mkdir -p ~/archivebox/data
@@ -36,7 +36,7 @@ class Archivebox < Formula
     cd testpath/"data" do
       system "#{bin}/archivebox", "init"
       system "#{bin}/archivebox", "install"
-      assert_match "0.9.35rc175", shell_output("#{bin}/archivebox version")
+      assert_match "0.9.35rc180", shell_output("#{bin}/archivebox version")
       system "#{bin}/archivebox", "status"
     end
   end
