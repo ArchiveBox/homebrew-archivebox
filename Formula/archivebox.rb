@@ -8,7 +8,6 @@ class Archivebox < Formula
   sha256 "505e208d4fbc46d36366659926c68fe8188e26dd2a80f4e76eda59e109dc8fd9"
   version "0.9.35rc175"
   license "MIT"
-  head "https://github.com/ArchiveBox/ArchiveBox.git", branch: "dev"
 
   depends_on "uv"
 

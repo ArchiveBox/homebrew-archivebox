@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build Formula/archivebox.rb from an ArchiveBox dev release ref."""
+"""Build Formula/archivebox.rb from an exact published ArchiveBox version."""
 
 from __future__ import annotations
 
@@ -38,7 +38,6 @@ def formula_template(version: str, wheel_url: str, wheel_sha256: str) -> str:
           sha256 "{wheel_sha256}"
           version "{version}"
           license "MIT"
-          head "https://github.com/ArchiveBox/ArchiveBox.git", branch: "dev"
 
           depends_on "uv"
 
@@ -84,9 +83,6 @@ def published_wheel(version: str) -> tuple[str, str]:
         release = json.load(response)
 
     wheel_urls = [item for item in release["urls"] if item["filename"].endswith(".whl")]
-    requested_url = os.environ.get("ARCHIVEBOX_WHEEL_URL", "")
-    if requested_url:
-        wheel_urls = [item for item in wheel_urls if item["url"] == requested_url]
     if len(wheel_urls) != 1:
         raise RuntimeError(
             f"Expected one published wheel for archivebox=={version}, found {len(wheel_urls)}",

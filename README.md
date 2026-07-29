@@ -29,4 +29,4 @@ This is not a "proper homebrew package" it's just a wrapper for the normal `pip`
 
 Do not add Python `resource` blocks, bottles, or generated dependency lists. ArchiveBox's
 Python dependencies live in `ArchiveBox/ArchiveBox` package metadata and are resolved in
-the formula's Python virtualenv at install time.
+uv's normal tool environment at runtime.
