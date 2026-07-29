@@ -47,6 +47,8 @@ jobs:
         env:
           ARCHIVEBOX_REF: ${{ inputs.archivebox_ref }}
           ARCHIVEBOX_SHA: ${{ inputs.archivebox_sha }}
+          ARCHIVEBOX_VERSION: ${{ inputs.archivebox_version }}
+          ARCHIVEBOX_WHEEL_URL: ${{ inputs.archivebox_wheel_url }}
         run: bin/build_brew.sh
 
       - name: Validate formula syntax
