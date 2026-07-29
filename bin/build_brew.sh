@@ -53,6 +53,9 @@ def clone_archivebox() -> tuple[Path, tempfile.TemporaryDirectory[str]]:
         if actual_sha != sha:
             run("git", "fetch", "--depth=1", "origin", sha, cwd=checkout)
             run("git", "checkout", "--detach", sha, cwd=checkout)
+        actual_sha = run("git", "rev-parse", "HEAD", cwd=checkout)
+        if actual_sha != sha:
+            raise RuntimeError(f"ArchiveBox {ref} resolved to {actual_sha}, expected {sha}")
     return checkout, tmpdir
 
 
