@@ -1,18 +1,16 @@
-name: Update ArchiveBox dev formula
+name: Update ArchiveBox formula
 
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [archivebox-dev-updated]
-  schedule:
-    - cron: "17 * * * *"
+    types: [archivebox-release]
 
 permissions:
   contents: write
 
 concurrency:
-  group: update-archivebox-dev-formula
-  cancel-in-progress: true
+  group: update-archivebox-formula
+  cancel-in-progress: false
 
 jobs:
   update:
