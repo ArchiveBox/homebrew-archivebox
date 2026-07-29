@@ -53,7 +53,7 @@ jobs:
             exit 1
           fi
           ln -s "$PWD" "$tap_root"
-          brew install --build-from-source ArchiveBox/archivebox/archivebox
+          brew install ArchiveBox/archivebox/archivebox
           brew test ArchiveBox/archivebox/archivebox
 
       - name: Commit formula update

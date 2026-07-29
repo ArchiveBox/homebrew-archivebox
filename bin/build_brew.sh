@@ -3,10 +3,8 @@
 
 from __future__ import annotations
 
-import argparse
 import json
 import os
-import sys
 import textwrap
 import urllib.request
 from pathlib import Path
@@ -91,7 +89,7 @@ def published_wheel(version: str) -> tuple[str, str]:
     return wheel["url"], wheel["digests"]["sha256"]
 
 
-def update_formula(check: bool) -> int:
+def update_formula() -> int:
     version = os.environ.get("ARCHIVEBOX_VERSION", "")
     if not version:
         raise RuntimeError("ARCHIVEBOX_VERSION is required")
@@ -103,13 +101,8 @@ def update_formula(check: bool) -> int:
 
     github_output(
         changed=str(changed).lower(),
-        archivebox_version=version,
         formula_version=version,
     )
-
-    if check and changed:
-        print(f"{FORMULA_PATH} is not up to date", file=sys.stderr)
-        return 1
 
     if changed:
         FORMULA_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -122,11 +115,7 @@ def update_formula(check: bool) -> int:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--check", action="store_true", help="fail if Formula/archivebox.rb is stale")
-    args = parser.parse_args()
-
-    return update_formula(check=args.check)
+    return update_formula()
 
 
 if __name__ == "__main__":

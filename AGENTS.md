@@ -18,7 +18,7 @@ This repo is the Homebrew tap for ArchiveBox. Keep this repo on `main`.
 ## Development Setup
 
 ```bash
-./bin/build_brew.sh
+ARCHIVEBOX_VERSION=0.9.35rc175 ./bin/build_brew.sh
 ```
 
 ## User-Facing Setup
@@ -43,7 +43,7 @@ Alternative install methods:
 ## Basic Usage
 
 ```bash
-./bin/build_brew.sh
+ARCHIVEBOX_VERSION=0.9.35rc175 ./bin/build_brew.sh
 sed -n '1,180p' Formula/archivebox.rb
 ```
 
