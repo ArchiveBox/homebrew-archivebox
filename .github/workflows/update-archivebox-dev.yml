@@ -38,6 +38,10 @@ jobs:
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@9651e3cfa42dae9ae90ca79eaa6d36dcd8569168
 
+      # setup-homebrew replaces the tap checkout in-place, including the
+      # authenticated remote configured by actions/checkout.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
       - name: Update formula
         id: update
         env:
