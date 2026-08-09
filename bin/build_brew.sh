@@ -63,7 +63,6 @@ def formula_template(version: str, wheel_url: str, wheel_sha256: str) -> str:
             (testpath/"data").mkpath
             cd testpath/"data" do
               system "#{{bin}}/archivebox", "init"
-              system "#{{bin}}/archivebox", "install"
               assert_match "{version}", shell_output("#{{bin}}/archivebox version")
               system "#{{bin}}/archivebox", "status"
             end

@@ -57,6 +57,15 @@ jobs:
           brew install --build-bottle ArchiveBox/archivebox/archivebox
           brew test ArchiveBox/archivebox/archivebox
 
+      - name: Validate runtime dependency install
+        if: steps.update.outputs.changed == 'true'
+        run: |
+          set -Eeuo pipefail
+          data_dir="$(mktemp -d)"
+          cd "$data_dir"
+          archivebox init
+          archivebox install
+
       - name: Build Linux bottle
         if: steps.update.outputs.changed == 'true'
         run: |

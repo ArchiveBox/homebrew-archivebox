@@ -35,7 +35,6 @@ class Archivebox < Formula
     (testpath/"data").mkpath
     cd testpath/"data" do
       system "#{bin}/archivebox", "init"
-      system "#{bin}/archivebox", "install"
       assert_match "0.9.35rc196", shell_output("#{bin}/archivebox version")
       system "#{bin}/archivebox", "status"
     end
