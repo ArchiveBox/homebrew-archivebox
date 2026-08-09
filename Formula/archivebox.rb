@@ -5,8 +5,8 @@ class Archivebox < Formula
   desc "Self-hosted internet archiving solution"
   homepage "https://archivebox.io"
   url "https://files.pythonhosted.org/packages/f2/b2/8e9dd317c581640cb06032b2efde42c20db2d9c2001822d928ebba2c78ba/archivebox-0.9.35rc196-py3-none-any.whl"
-  sha256 "ba60ee55ad997ff25361291d526ab2af46730611a7719bce5cc69bb9bdfddcef"
   version "0.9.35rc196"
+  sha256 "ba60ee55ad997ff25361291d526ab2af46730611a7719bce5cc69bb9bdfddcef"
   license "MIT"
 
   depends_on "uv"
@@ -14,7 +14,7 @@ class Archivebox < Formula
   def install
     (bin/"archivebox").write <<~SH
       #!/bin/sh
-      exec "#{Formula["uv"].opt_bin}/uv" tool run --from "https://files.pythonhosted.org/packages/f2/b2/8e9dd317c581640cb06032b2efde42c20db2d9c2001822d928ebba2c78ba/archivebox-0.9.35rc196-py3-none-any.whl" archivebox "$@"
+      exec uv tool run --from "https://files.pythonhosted.org/packages/f2/b2/8e9dd317c581640cb06032b2efde42c20db2d9c2001822d928ebba2c78ba/archivebox-0.9.35rc196-py3-none-any.whl" archivebox "$@"
     SH
     chmod 0755, bin/"archivebox"
   end

@@ -33,8 +33,8 @@ def formula_template(version: str, wheel_url: str, wheel_sha256: str) -> str:
           desc "Self-hosted internet archiving solution"
           homepage "https://archivebox.io"
           url "{wheel_url}"
-          sha256 "{wheel_sha256}"
           version "{version}"
+          sha256 "{wheel_sha256}"
           license "MIT"
 
           depends_on "uv"
@@ -42,7 +42,7 @@ def formula_template(version: str, wheel_url: str, wheel_sha256: str) -> str:
           def install
             (bin/"archivebox").write <<~SH
               #!/bin/sh
-              exec "#{{Formula["uv"].opt_bin}}/uv" tool run --from "{wheel_url}" archivebox "$@"
+              exec uv tool run --from "{wheel_url}" archivebox "$@"
             SH
             chmod 0755, bin/"archivebox"
           end

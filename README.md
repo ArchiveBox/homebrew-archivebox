@@ -22,11 +22,12 @@ This is not a "proper homebrew package" it's just a wrapper for the normal `pip`
 ## Maintenance
 
 - `Formula/archivebox.rb` runs one exact PyPI wheel through Homebrew's prebuilt
-  `uv` dependency.
+  `uv` dependency. A tiny Linux bottle avoids requiring build tools just to
+  install the wrapper.
 - `bin/build_brew.sh` verifies the requested release against PyPI and rewrites
   the formula.
 - `.github/workflows/update-archivebox-dev.yml` commits formula updates.
 
-Do not add Python `resource` blocks, bottles, or generated dependency lists. ArchiveBox's
-Python dependencies live in `ArchiveBox/ArchiveBox` package metadata and are resolved in
-uv's normal tool environment at runtime.
+Do not add Python `resource` blocks or generated dependency lists. ArchiveBox's Python
+dependencies live in `ArchiveBox/ArchiveBox` package metadata and are resolved in uv's
+normal tool environment at runtime.

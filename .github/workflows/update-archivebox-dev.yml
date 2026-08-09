@@ -42,6 +42,7 @@ jobs:
         run: ruby -c Formula/archivebox.rb
 
       - name: Install and test formula
+        if: steps.update.outputs.changed == 'true'
         run: |
           set -Eeuo pipefail
           tap_root="$(brew --repository)/Library/Taps/archivebox/homebrew-archivebox"
@@ -53,16 +54,41 @@ jobs:
             exit 1
           fi
           ln -s "$PWD" "$tap_root"
-          brew install ArchiveBox/archivebox/archivebox
+          brew install --build-bottle ArchiveBox/archivebox/archivebox
           brew test ArchiveBox/archivebox/archivebox
+
+      - name: Build Linux bottle
+        if: steps.update.outputs.changed == 'true'
+        run: |
+          set -Eeuo pipefail
+          root_url="https://raw.githubusercontent.com/ArchiveBox/homebrew-archivebox/main/Bottles"
+          brew bottle --json --no-rebuild --root-url="$root_url" ArchiveBox/archivebox/archivebox
+          bottle_json="$(find . -maxdepth 1 -name 'archivebox--*.bottle.json' -print -quit)"
+          readarray -t bottle_names < <(python3 - "$bottle_json" <<'PY'
+          import json
+          import sys
+
+          bottle = next(iter(json.load(open(sys.argv[1], encoding="utf-8")).values()))["bottle"]
+          tag = next(iter(bottle["tags"].values()))
+          print(tag["local_filename"])
+          print(tag["filename"])
+          PY
+          )
+          test "${#bottle_names[@]}" -eq 2
+          mkdir -p Bottles
+          find Bottles -maxdepth 1 -name 'archivebox-*.bottle.tar.gz' -delete
+          mv "${bottle_names[0]}" "Bottles/${bottle_names[1]}"
+          brew bottle --merge --write --no-commit "$bottle_json"
+          test -s "Bottles/${bottle_names[1]}"
+          grep -q 'x86_64_linux:' Formula/archivebox.rb
 
       - name: Commit formula update
         if: steps.update.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add Formula/archivebox.rb
-          if git diff --cached --quiet -- Formula/archivebox.rb; then
+          git add Formula/archivebox.rb Bottles/
+          if git diff --cached --quiet -- Formula/archivebox.rb Bottles/; then
             echo "Generated formula update was lost before publication." >&2
             exit 1
           fi
