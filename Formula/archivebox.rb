@@ -4,14 +4,14 @@
 class Archivebox < Formula
   desc "Self-hosted internet archiving solution"
   homepage "https://archivebox.io"
-  url "https://files.pythonhosted.org/packages/b9/8e/b0a437c18ca4bf0c6d4779ae3ce8f743ad64a442e25510f3be6863993e6c/archivebox-0.9.35rc218-py3-none-any.whl"
-  version "0.9.35rc218"
-  sha256 "d256166e2ce490f3916c2e208479c09bbf123305a9e6fc92450498f6e1f3b6ae"
+  url "https://files.pythonhosted.org/packages/db/db/77ffc3abe1bbe3394515fc403f7b9881018de24805465e83d3618a83bc84/archivebox-0.9.35rc221-py3-none-any.whl"
+  version "0.9.35rc221"
+  sha256 "fd944b3760cc2c895d3182c52102d23764a90b6979eec9862da0b43717b44d62"
   license "MIT"
 
   bottle do
     root_url "https://raw.githubusercontent.com/ArchiveBox/homebrew-archivebox/main/Bottles"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "ec4e3242fa70bc1ad8052c7f43e54bbd3e411100e7fdefd1ac44c5b4379dfe9b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "50b0fefe16a24fca14ff99a7fcc4b8022ddb05c6b3cb26845f77f551189cae24"
   end
 
   depends_on "uv"
@@ -19,14 +19,14 @@ class Archivebox < Formula
   def install
     (bin/"archivebox").write <<~SH
       #!/bin/sh
-      exec uv tool run --from "https://files.pythonhosted.org/packages/b9/8e/b0a437c18ca4bf0c6d4779ae3ce8f743ad64a442e25510f3be6863993e6c/archivebox-0.9.35rc218-py3-none-any.whl" archivebox "$@"
+      exec uv tool run --from "https://files.pythonhosted.org/packages/db/db/77ffc3abe1bbe3394515fc403f7b9881018de24805465e83d3618a83bc84/archivebox-0.9.35rc221-py3-none-any.whl" archivebox "$@"
     SH
     chmod 0755, bin/"archivebox"
   end
 
   def caveats
     <<~EOS
-      ArchiveBox 0.9.35rc218 runs from its verified PyPI wheel through uv.
+      ArchiveBox 0.9.35rc221 runs from its verified PyPI wheel through uv.
 
       To create a collection and install runtime extractors:
         mkdir -p ~/archivebox/data
@@ -40,7 +40,7 @@ class Archivebox < Formula
     (testpath/"data").mkpath
     cd testpath/"data" do
       system "#{bin}/archivebox", "init"
-      assert_match "0.9.35rc218", shell_output("#{bin}/archivebox version")
+      assert_match "0.9.35rc221", shell_output("#{bin}/archivebox version")
       system "#{bin}/archivebox", "status"
     end
   end
