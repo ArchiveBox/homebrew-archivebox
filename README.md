@@ -6,6 +6,7 @@
 
 ```bash
 brew tap archivebox/archivebox
+brew trust archivebox/archivebox
 brew install archivebox
 
 mkdir -p ~/archivebox/data
