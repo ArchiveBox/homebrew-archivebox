@@ -2,7 +2,6 @@
 
 > [!CAUTION]
 > This tracks `dev` releases, not stable! Report any issues you encounter please!  
-> Use the normal `pip install archivebox` method if you want a stable release.
 
 ```bash
 brew tap archivebox/archivebox
@@ -18,7 +17,7 @@ archivebox install
 This tap tracks published `ArchiveBox/ArchiveBox@dev` prereleases. The release
 pipeline regenerates the formula after each verified PyPI publication.
 
-This is not a "proper homebrew package" it's just a wrapper for the normal `pip`-based install, for users that prefer installing & updating with brew.
+This is a thin Homebrew wrapper around ArchiveBox's verified PyPI wheel, for users that prefer installing and updating with `brew`.
 
 ## Maintenance
 
