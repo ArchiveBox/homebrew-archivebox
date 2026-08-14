@@ -42,7 +42,7 @@ def formula_template(version: str, wheel_url: str, wheel_sha256: str) -> str:
           def install
             (bin/"archivebox").write <<~SH
               #!/bin/sh
-              exec uv tool run --from "{wheel_url}" archivebox "$@"
+              exec "#{{Formula["uv"].opt_bin}}/uv" tool run --from "{wheel_url}" archivebox "$@"
             SH
             chmod 0755, bin/"archivebox"
           end
