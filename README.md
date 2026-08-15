@@ -19,6 +19,18 @@ pipeline regenerates the formula after each verified PyPI publication.
 
 This is a thin Homebrew wrapper around ArchiveBox's verified PyPI wheel, for users that prefer installing and updating with `brew`.
 
+## Upgrade
+
+Run Homebrew and ArchiveBox as your normal user, without `sudo`:
+
+```bash
+brew update
+brew upgrade archivebox
+cd ~/archivebox/data
+archivebox init
+archivebox install
+```
+
 ## Maintenance
 
 - `Formula/archivebox.rb` runs one exact PyPI wheel through Homebrew's prebuilt
