@@ -11,7 +11,7 @@ class Archivebox < Formula
 
   bottle do
     root_url "https://raw.githubusercontent.com/ArchiveBox/homebrew-archivebox/main/Bottles"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "6d925ddd349602a0e0334d64bcc6e1da96dd4312f537b8dc5b4f934c19d639b2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "5f309d9db00a060a7bb8693d00235e0cd9c8f91e4a96b9a5669eeb123599802e"
   end
 
   depends_on "uv"
