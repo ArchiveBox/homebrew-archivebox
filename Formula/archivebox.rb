@@ -9,6 +9,11 @@ class Archivebox < Formula
   sha256 "7fde669721f4fc5d48c4469e7c9bc6d66d65fd116870e092ebfea966c68ceb0d"
   license "MIT"
 
+  bottle do
+    root_url "https://raw.githubusercontent.com/ArchiveBox/homebrew-archivebox/main/Bottles"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "a8274f5c5c81131aa1ba9902913e11fdb7243bc5988842d5e7e4b3bc1b2cb1d0"
+  end
+
   depends_on "uv"
 
   def install
