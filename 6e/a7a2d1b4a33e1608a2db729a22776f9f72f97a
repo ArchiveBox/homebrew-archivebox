@@ -1,0 +1,20 @@
+.github/workflows/update-archivebox-dev.yml
+  h_923c208e183a7b 74-75
+Formula/archivebox.rb
+  h_923c208e183a7b 17
+README.md
+  h_923c208e183a7b 37-38
+bin/build_brew.sh
+  h_923c208e183a7b 45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "6ea7a2d1b4a33e1608a2db729a22776f9f72f97a",
+  "prompts": {},
+  "humans": {
+    "h_923c208e183a7b": {
+      "author": "Nick Sweeting <git@sweeting.me>"
+    }
+  }
+}
