@@ -34,8 +34,8 @@ archivebox install
 ## Maintenance
 
 - `Formula/archivebox.rb` runs one exact PyPI wheel through Homebrew's prebuilt
-  `uv` dependency. A tiny Linux bottle avoids requiring build tools just to
-  install the wrapper.
+  `uv` dependency. Installing the wrapper only writes its launcher and does not
+  require build tools.
 - `bin/build_brew.sh` verifies the requested release against PyPI and rewrites
   the formula.
 - `.github/workflows/update-archivebox-dev.yml` commits formula updates.
