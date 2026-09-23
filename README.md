@@ -1,8 +1,5 @@
 # ArchiveBox Homebrew Tap
 
-> [!CAUTION]
-> This tracks `dev` releases, not stable! Report any issues you encounter please!  
-
 ```bash
 brew tap archivebox/archivebox
 brew trust archivebox/archivebox
@@ -14,8 +11,9 @@ archivebox init
 archivebox install
 ```
 
-This tap tracks published `ArchiveBox/ArchiveBox@dev` prereleases. The release
-pipeline regenerates the formula after each verified PyPI publication.
+The release pipeline regenerates this tap's formula after each verified
+ArchiveBox publication, including stable releases from `main` and prereleases
+from `dev`. The formula installs the exact published wheel and verifies its hash.
 
 This is a thin Homebrew wrapper around ArchiveBox's verified PyPI wheel, for users that prefer installing and updating with `brew`.
 
