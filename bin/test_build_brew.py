@@ -3,6 +3,7 @@
 import importlib.machinery
 import importlib.util
 from pathlib import Path
+import re
 import unittest
 
 
@@ -11,10 +12,12 @@ spec = importlib.util.spec_from_loader(loader.name, loader)
 build = importlib.util.module_from_spec(spec)
 loader.exec_module(build)
 
-# From ArchiveBox CI run 37551885745's python-distributions artifact.
-VERSION = "0.9.74rc5"
-URL = "https://files.pythonhosted.org/packages/e1/76/a4dbe883a19456e853772822a7a7c61cb254841e4074d346fee2811817b7/archivebox-0.9.74rc5-py3-none-any.whl"
-SHA256 = "2e22f66e5319e2bd709633282b0d896deb6cf41f44a1a14894125dd32130e539"
+# Exercise the artifact currently shipped by the tap, including future bumps.
+formula = build.FORMULA_PATH.read_text()
+VERSION, URL, SHA256 = (
+    re.search(rf'^  {field} "([^"]+)"$', formula, re.MULTILINE).group(1)
+    for field in ("version", "url", "sha256")
+)
 
 
 class PublishedWheelTests(unittest.TestCase):
@@ -31,7 +34,7 @@ class PublishedWheelTests(unittest.TestCase):
 
     def test_wrong_release_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "version"):
-            build.published_wheel("0.9.73", URL, SHA256)
+            build.published_wheel(VERSION + ".invalid", URL, SHA256)
 
 
 if __name__ == "__main__":

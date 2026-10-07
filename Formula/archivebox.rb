@@ -14,7 +14,7 @@ class Archivebox < Formula
   def install
     (bin/"archivebox").write <<~SH
       #!/bin/sh
-      exec "#{formula_opt_bin("uv")}/uv" tool run --from "https://files.pythonhosted.org/packages/e1/76/a4dbe883a19456e853772822a7a7c61cb254841e4074d346fee2811817b7/archivebox-0.9.74rc5-py3-none-any.whl" archivebox "$@"
+      exec "#{formula_opt_bin("uv")}/uv" tool run --from "https://files.pythonhosted.org/packages/e1/76/a4dbe883a19456e853772822a7a7c61cb254841e4074d346fee2811817b7/archivebox-0.9.74rc5-py3-none-any.whl#sha256=2e22f66e5319e2bd709633282b0d896deb6cf41f44a1a14894125dd32130e539" archivebox "$@"
     SH
     chmod 0755, bin/"archivebox"
   end
