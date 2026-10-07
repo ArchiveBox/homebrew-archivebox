@@ -40,7 +40,12 @@ jobs:
           ruby -c Formula/archivebox.rb
           tap_root="$(brew --repository)/Library/Taps/archivebox/homebrew-archivebox"
           mkdir -p "$(dirname "$tap_root")"
-          test ! -e "$tap_root"
+          if [[ -L "$tap_root" ]]; then
+            rm "$tap_root"
+          elif [[ -e "$tap_root" ]]; then
+            echo "Unexpected non-symlink tap path: $tap_root" >&2
+            exit 1
+          fi
           ln -s "$PWD" "$tap_root"
           brew install --build-from-source ArchiveBox/archivebox/archivebox
           brew test ArchiveBox/archivebox/archivebox
