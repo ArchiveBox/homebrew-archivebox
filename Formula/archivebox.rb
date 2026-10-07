@@ -4,29 +4,24 @@
 class Archivebox < Formula
   desc "Self-hosted internet archiving solution"
   homepage "https://archivebox.io"
-  url "https://files.pythonhosted.org/packages/5d/a4/76f25f35e85892c7a7bed2090e474242c96f885300d75e232a0af7e01068/archivebox-0.9.73-py3-none-any.whl"
-  version "0.9.73"
-  sha256 "2b4a4be06420cbe0f6991bc18d45df62f324c84f2f652c2cb056a2be3a3ca117"
+  url "https://files.pythonhosted.org/packages/e1/76/a4dbe883a19456e853772822a7a7c61cb254841e4074d346fee2811817b7/archivebox-0.9.74rc5-py3-none-any.whl"
+  version "0.9.74rc5"
+  sha256 "2e22f66e5319e2bd709633282b0d896deb6cf41f44a1a14894125dd32130e539"
   license "MIT"
-
-  bottle do
-    root_url "https://raw.githubusercontent.com/ArchiveBox/homebrew-archivebox/main/Bottles"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "4b253abf945e063604bcf612e9b9b9b06f444e8d180ae3f181b43fe617cae0c9"
-  end
 
   depends_on "uv"
 
   def install
     (bin/"archivebox").write <<~SH
       #!/bin/sh
-      exec "#{formula_opt_bin("uv")}/uv" tool run --from "https://files.pythonhosted.org/packages/5d/a4/76f25f35e85892c7a7bed2090e474242c96f885300d75e232a0af7e01068/archivebox-0.9.73-py3-none-any.whl" archivebox "$@"
+      exec "#{formula_opt_bin("uv")}/uv" tool run --from "https://files.pythonhosted.org/packages/e1/76/a4dbe883a19456e853772822a7a7c61cb254841e4074d346fee2811817b7/archivebox-0.9.74rc5-py3-none-any.whl" archivebox "$@"
     SH
     chmod 0755, bin/"archivebox"
   end
 
   def caveats
     <<~EOS
-      ArchiveBox 0.9.73 runs from its verified PyPI wheel through uv.
+      ArchiveBox 0.9.74rc5 runs from its verified PyPI wheel through uv.
 
       To create a collection and install runtime extractors:
         mkdir -p ~/archivebox/data
@@ -40,7 +35,7 @@ class Archivebox < Formula
     (testpath/"data").mkpath
     cd testpath/"data" do
       system "#{bin}/archivebox", "init"
-      assert_match "0.9.73", shell_output("#{bin}/archivebox version")
+      assert_match "0.9.74rc5", shell_output("#{bin}/archivebox version")
       system "#{bin}/archivebox", "status"
     end
   end

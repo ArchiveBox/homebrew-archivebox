@@ -1,11 +1,18 @@
 name: Update ArchiveBox formula
 
 on:
+  pull_request:
   workflow_dispatch:
     inputs:
       archivebox_version:
         description: "Exact ArchiveBox version"
         required: true
+      archivebox_wheel_url:
+        description: "Exact tested PyPI wheel URL from the release coordinator"
+        required: false
+      archivebox_wheel_sha256:
+        description: "SHA256 of the tested wheel"
+        required: false
 
 permissions:
   contents: write
@@ -15,7 +22,31 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  test:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+      - run: uv run --no-project python bin/test_build_brew.py
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@9651e3cfa42dae9ae90ca79eaa6d36dcd8569168
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install and test committed formula
+        run: |
+          set -Eeuo pipefail
+          ruby -c Formula/archivebox.rb
+          tap_root="$(brew --repository)/Library/Taps/archivebox/homebrew-archivebox"
+          mkdir -p "$(dirname "$tap_root")"
+          test ! -e "$tap_root"
+          ln -s "$PWD" "$tap_root"
+          brew install --build-from-source ArchiveBox/archivebox/archivebox
+          brew test ArchiveBox/archivebox/archivebox
+
   update:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
 
     steps:
@@ -36,6 +67,8 @@ jobs:
         id: update
         env:
           ARCHIVEBOX_VERSION: ${{ inputs.archivebox_version }}
+          ARCHIVEBOX_WHEEL_URL: ${{ inputs.archivebox_wheel_url }}
+          ARCHIVEBOX_WHEEL_SHA256: ${{ inputs.archivebox_wheel_sha256 }}
         run: bin/build_brew.sh
 
       - name: Validate formula syntax

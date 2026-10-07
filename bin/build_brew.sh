@@ -4,8 +4,11 @@
 from __future__ import annotations
 
 import json
+from hashlib import sha256
 import os
+import re
 import textwrap
+from urllib.parse import urlsplit
 import urllib.request
 from pathlib import Path
 
@@ -72,27 +75,42 @@ def formula_template(version: str, wheel_url: str, wheel_sha256: str) -> str:
     )
 
 
-def published_wheel(version: str) -> tuple[str, str]:
-    with urllib.request.urlopen(
-        f"https://pypi.org/pypi/archivebox/{version}/json",
-        timeout=20,
-    ) as response:
-        release = json.load(response)
+def published_wheel(version: str, wheel_url: str = "", wheel_sha256: str = "") -> tuple[str, str]:
+    if bool(wheel_url) != bool(wheel_sha256):
+        raise ValueError("Wheel URL and SHA256 must be supplied together")
+    if not wheel_url:
+        # Manual maintenance can resolve a version. The release coordinator
+        # supplies the tested artifact directly, avoiding regional index lag.
+        with urllib.request.urlopen(
+            f"https://pypi.org/pypi/archivebox/{version}/json", timeout=20,
+        ) as response:
+            release = json.load(response)
+        wheels = [item for item in release["urls"] if item["filename"].endswith(".whl")]
+        if len(wheels) != 1:
+            raise RuntimeError(f"Expected one published wheel for archivebox=={version}, found {len(wheels)}")
+        wheel_url, wheel_sha256 = wheels[0]["url"], wheels[0]["digests"]["sha256"]
 
-    wheel_urls = [item for item in release["urls"] if item["filename"].endswith(".whl")]
-    if len(wheel_urls) != 1:
-        raise RuntimeError(
-            f"Expected one published wheel for archivebox=={version}, found {len(wheel_urls)}",
-        )
-    wheel = wheel_urls[0]
-    return wheel["url"], wheel["digests"]["sha256"]
+    url = urlsplit(wheel_url)
+    if (url.scheme != "https" or url.netloc != "files.pythonhosted.org"
+            or url.query or url.fragment
+            or Path(url.path).name != f"archivebox-{version}-py3-none-any.whl"):
+        raise ValueError("Expected the exact version's public PyPI wheel URL")
+    if not re.fullmatch(r"[0-9a-f]{64}", wheel_sha256):
+        raise ValueError("Expected a SHA256 hex digest")
+    with urllib.request.urlopen(wheel_url, timeout=20) as response:
+        digest = sha256(response.read()).hexdigest()
+    if digest != wheel_sha256:
+        raise ValueError(f"Published wheel SHA256 mismatch: {digest} != {wheel_sha256}")
+    return wheel_url, wheel_sha256
 
 
 def update_formula() -> int:
     version = os.environ.get("ARCHIVEBOX_VERSION", "")
     if not version:
         raise RuntimeError("ARCHIVEBOX_VERSION is required")
-    wheel_url, wheel_sha256 = published_wheel(version)
+    wheel_url, wheel_sha256 = published_wheel(
+        version, os.environ.get("ARCHIVEBOX_WHEEL_URL", ""), os.environ.get("ARCHIVEBOX_WHEEL_SHA256", ""),
+    )
     new_formula = formula_template(version, wheel_url, wheel_sha256)
 
     old_formula = FORMULA_PATH.read_text(encoding="utf-8") if FORMULA_PATH.exists() else ""
