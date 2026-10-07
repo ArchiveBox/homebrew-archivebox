@@ -34,8 +34,11 @@ archivebox install
 - `Formula/archivebox.rb` runs one exact PyPI wheel through Homebrew's prebuilt
   `uv` dependency. A tiny Linux bottle avoids requiring build tools just to
   install the wrapper, and published bottles remain available for stale taps.
-- `bin/build_brew.sh` verifies the requested release against PyPI and rewrites
-  the formula.
+- `bin/build_brew.sh` downloads and verifies the requested PyPI wheel and rewrites
+  the formula. The coordinator supplies `ARCHIVEBOX_WHEEL_URL` and
+  `ARCHIVEBOX_WHEEL_SHA256` from the tested release artifact, so a fresh release
+  does not depend on another region's PyPI metadata cache. Manual maintenance
+  with only `ARCHIVEBOX_VERSION` resolves that version through PyPI first.
 - `.github/workflows/update-archivebox-dev.yml` commits formula updates.
 
 Do not add Python `resource` blocks or generated dependency lists. ArchiveBox's Python
