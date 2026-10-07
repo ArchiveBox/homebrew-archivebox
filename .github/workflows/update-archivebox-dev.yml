@@ -18,40 +18,11 @@ permissions:
   contents: write
 
 concurrency:
-  group: update-archivebox-formula
+  group: ${{ github.event_name == 'workflow_dispatch' && 'update-archivebox-formula' || github.run_id }}
   cancel-in-progress: false
 
 jobs:
-  test:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
-      - run: uv run --no-project python bin/test_build_brew.py
-      - name: Set up Homebrew
-        uses: Homebrew/actions/setup-homebrew@9651e3cfa42dae9ae90ca79eaa6d36dcd8569168
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - name: Install and test committed formula
-        run: |
-          set -Eeuo pipefail
-          ruby -c Formula/archivebox.rb
-          tap_root="$(brew --repository)/Library/Taps/archivebox/homebrew-archivebox"
-          mkdir -p "$(dirname "$tap_root")"
-          if [[ -L "$tap_root" ]]; then
-            rm "$tap_root"
-          elif [[ -e "$tap_root" ]]; then
-            echo "Unexpected non-symlink tap path: $tap_root" >&2
-            exit 1
-          fi
-          ln -s "$PWD" "$tap_root"
-          brew install --build-from-source ArchiveBox/archivebox/archivebox
-          brew test ArchiveBox/archivebox/archivebox
-
   update:
-    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
 
     steps:
@@ -61,6 +32,11 @@ jobs:
         with:
           python-version: "3.13"
 
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+
+      - name: Test verified wheel handoff
+        run: uv run --no-project python bin/test_build_brew.py
+
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@9651e3cfa42dae9ae90ca79eaa6d36dcd8569168
 
@@ -69,6 +45,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Update formula
+        if: github.event_name == 'workflow_dispatch'
         id: update
         env:
           ARCHIVEBOX_VERSION: ${{ inputs.archivebox_version }}
@@ -80,7 +57,7 @@ jobs:
         run: ruby -c Formula/archivebox.rb
 
       - name: Install and test formula
-        if: steps.update.outputs.changed == 'true'
+        if: github.event_name == 'pull_request' || steps.update.outputs.changed == 'true'
         run: |
           set -Eeuo pipefail
           tap_root="$(brew --repository)/Library/Taps/archivebox/homebrew-archivebox"
@@ -105,7 +82,7 @@ jobs:
           archivebox install
 
       - name: Build Linux bottle
-        if: steps.update.outputs.changed == 'true'
+        if: github.event_name == 'pull_request' || steps.update.outputs.changed == 'true'
         run: |
           set -Eeuo pipefail
           root_url="https://raw.githubusercontent.com/ArchiveBox/homebrew-archivebox/main/Bottles"
@@ -127,6 +104,15 @@ jobs:
           brew bottle --merge --write --no-commit "$bottle_json"
           test -s "Bottles/${bottle_names[1]}"
           grep -q 'x86_64_linux:' Formula/archivebox.rb
+
+      - name: Upload tested formula and bottle
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: tested-homebrew-formula
+          path: |
+            Formula/archivebox.rb
+            Bottles/
 
       - name: Commit formula update
         if: steps.update.outputs.changed == 'true'
