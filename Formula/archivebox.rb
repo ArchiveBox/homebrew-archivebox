@@ -4,14 +4,14 @@
 class Archivebox < Formula
   desc "Self-hosted internet archiving solution"
   homepage "https://archivebox.io"
-  url "https://files.pythonhosted.org/packages/0d/5a/8cc80f733c9eec685f83e731e7b93e6a7c4b0936c668f446fb84116835fb/archivebox-0.9.74rc16-py3-none-any.whl"
-  version "0.9.74rc16"
-  sha256 "d118e732a3cecbe9eadc0aded8edc40aa8815a2b813d222cc456f71ad53236fa"
+  url "https://files.pythonhosted.org/packages/0a/37/c914b44414dc4b3ba1fba0a2736ec43dd83dca31ad3c19011e8349e0a167/archivebox-0.9.74rc26-py3-none-any.whl"
+  version "0.9.74rc26"
+  sha256 "72f41981bc3932811f2b6b5d17912ce0f455ab7079d2221c717f86cbc6e636fb"
   license "MIT"
 
   bottle do
     root_url "https://raw.githubusercontent.com/ArchiveBox/homebrew-archivebox/main/Bottles"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "fd3ec6ec2c909479822e864d24a28a463c963f15ff43cedb7838e03af6169ce6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "2893c5e74a2d7b62a66e7ca8ed04dfa45dc15ed1832201e8b73065681bf9aa00"
   end
 
   depends_on "uv"
@@ -19,14 +19,14 @@ class Archivebox < Formula
   def install
     (bin/"archivebox").write <<~SH
       #!/bin/sh
-      exec "#{formula_opt_bin("uv")}/uv" tool run --from "https://files.pythonhosted.org/packages/0d/5a/8cc80f733c9eec685f83e731e7b93e6a7c4b0936c668f446fb84116835fb/archivebox-0.9.74rc16-py3-none-any.whl#sha256=d118e732a3cecbe9eadc0aded8edc40aa8815a2b813d222cc456f71ad53236fa" archivebox "$@"
+      exec "#{formula_opt_bin("uv")}/uv" tool run --from "https://files.pythonhosted.org/packages/0a/37/c914b44414dc4b3ba1fba0a2736ec43dd83dca31ad3c19011e8349e0a167/archivebox-0.9.74rc26-py3-none-any.whl#sha256=72f41981bc3932811f2b6b5d17912ce0f455ab7079d2221c717f86cbc6e636fb" archivebox "$@"
     SH
     chmod 0755, bin/"archivebox"
   end
 
   def caveats
     <<~EOS
-      ArchiveBox 0.9.74rc16 runs from its verified PyPI wheel through uv.
+      ArchiveBox 0.9.74rc26 runs from its verified PyPI wheel through uv.
 
       To create a collection and install runtime extractors:
         mkdir -p ~/archivebox/data
@@ -40,7 +40,7 @@ class Archivebox < Formula
     (testpath/"data").mkpath
     cd testpath/"data" do
       system "#{bin}/archivebox", "init"
-      assert_match "0.9.74rc16", shell_output("#{bin}/archivebox version")
+      assert_match "0.9.74rc26", shell_output("#{bin}/archivebox version")
       system "#{bin}/archivebox", "status"
     end
   end
