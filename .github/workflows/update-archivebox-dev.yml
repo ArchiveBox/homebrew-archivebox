@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
     inputs:
       archivebox_version:
-        description: "Exact ArchiveBox version"
-        required: true
+        description: "Exact stable ArchiveBox version (defaults to latest PyPI)"
+        required: false
       archivebox_wheel_url:
         description: "Exact tested PyPI wheel URL from the release coordinator"
         required: false
@@ -137,5 +137,5 @@ jobs:
             echo "Generated formula update was lost before publication." >&2
             exit 1
           fi
-          git commit -m "Update ArchiveBox dev formula to ${{ needs.update.outputs.formula_version }}"
+          git commit -m "Update ArchiveBox stable formula to ${{ needs.update.outputs.formula_version }}"
           git push origin HEAD:main

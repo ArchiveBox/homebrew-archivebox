@@ -21,6 +21,10 @@ VERSION, URL, SHA256 = (
 
 
 class PublishedWheelTests(unittest.TestCase):
+    def test_release_candidates_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, "stable version"):
+            build.published_wheel("0.9.74rc5")
+
     def test_exact_tested_wheel_is_downloaded_and_verified(self):
         self.assertEqual(build.published_wheel(VERSION, URL, SHA256), (URL, SHA256))
 

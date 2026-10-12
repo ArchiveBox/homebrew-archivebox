@@ -76,6 +76,8 @@ def formula_template(version: str, wheel_url: str, wheel_sha256: str) -> str:
 
 
 def published_wheel(version: str, wheel_url: str = "", wheel_sha256: str = "") -> tuple[str, str]:
+    if not re.fullmatch(r"\d+\.\d+\.\d+", version):
+        raise ValueError("Expected a stable version of ArchiveBox (X.Y.Z)")
     if bool(wheel_url) != bool(wheel_sha256):
         raise ValueError("Wheel URL and SHA256 must be supplied together")
     if not wheel_url:
@@ -107,7 +109,8 @@ def published_wheel(version: str, wheel_url: str = "", wheel_sha256: str = "") -
 def update_formula() -> int:
     version = os.environ.get("ARCHIVEBOX_VERSION", "")
     if not version:
-        raise RuntimeError("ARCHIVEBOX_VERSION is required")
+        with urllib.request.urlopen("https://pypi.org/pypi/archivebox/json", timeout=20) as response:
+            version = json.load(response)["info"]["version"]
     wheel_url, wheel_sha256 = published_wheel(
         version, os.environ.get("ARCHIVEBOX_WHEEL_URL", ""), os.environ.get("ARCHIVEBOX_WHEEL_SHA256", ""),
     )

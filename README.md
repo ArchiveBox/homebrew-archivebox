@@ -12,8 +12,8 @@ archivebox install
 ```
 
 The release pipeline regenerates this tap's formula after each verified
-ArchiveBox publication, including stable releases from `main` and prereleases
-from `dev`. The formula installs the exact published wheel and verifies its hash.
+stable ArchiveBox publication from `main`. Release candidates are rejected.
+The formula installs the exact published wheel and verifies its hash.
 
 This is a thin Homebrew wrapper around ArchiveBox's verified PyPI wheel, for users that prefer installing and updating with `brew`.
 
@@ -38,7 +38,8 @@ archivebox install
   the formula. The coordinator supplies `ARCHIVEBOX_WHEEL_URL` and
   `ARCHIVEBOX_WHEEL_SHA256` from the tested release artifact, so a fresh release
   does not depend on another region's PyPI metadata cache. Manual maintenance
-  with only `ARCHIVEBOX_VERSION` resolves that version through PyPI first.
+  with only `ARCHIVEBOX_VERSION` resolves that stable version through PyPI first.
+  Omitting it selects the latest stable PyPI release.
 - `.github/workflows/update-archivebox-dev.yml` commits formula updates.
 
 Do not add Python `resource` blocks or generated dependency lists. ArchiveBox's Python
