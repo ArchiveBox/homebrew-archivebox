@@ -36,6 +36,8 @@ jobs:
           python-version: "3.13"
 
       - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+        with:
+          version: "0.13.5"
 
       - name: Test verified wheel handoff
         run: uv run --no-project python bin/test_build_brew.py
